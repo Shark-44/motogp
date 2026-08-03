@@ -1,0 +1,21 @@
+{
+  "name": "motogp-hexagonal",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["frontend", "backend"],
+  "scripts": {
+    "dev": "concurrently -c green,yellow -n front,back \"npm run dev -w frontend\" \"npm run dev -w backend\"",
+    "lint": "npm run lint -ws",
+    "fix": "npm run fix -ws",
+    "migrate": "npm run migrate -w backend",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": ["eslint --fix"]
+  }
+}
