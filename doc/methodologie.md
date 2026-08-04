@@ -62,3 +62,7 @@ Parce que le code seul ne montre que le résultat, pas le raisonnement. Un dép�
 avec un historique de documentation cohérent — ADR datés, backlog qui évolue,
 journal des choix — se lit comme une démonstration de méthode de travail, ce
 qu'aucun extrait de code isolé ne peut prouver.
+
+## Mon trello
+
+https://trello.com/invite/b/6a70fe862e299d53f2c26340/ATTI5360576bb7016ae1ee7118735e2b3c0eF0ACAFFF/motogp-etude-hexagonale
