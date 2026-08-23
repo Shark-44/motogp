@@ -30,6 +30,14 @@ motogp-hexagonal/
 │   ├── backend/architecture.md      # détail des couches hexagonales
 │   ├── frontend/architecture.md     # organisation React (à venir)
 │   ├── adr/                         # décisions d'architecture documentées
+│   │   ├── ADR-modelisation-domaine-motogp.md
+│   │   ├── note-uml-classification.md   # méthode de classification (Entité/
+│   │   │                                # Service/Use Case, association/
+│   │   │                                # agrégation/composition)
+│   │   └── assets/
+│   │       ├── domaine-classes.png      # diagramme de classes final
+│   │       ├── cas-usage-visiteur.png   # diagramme de cas d'usage — Visiteur
+│   │       └── cas-usage-admin.png      # diagramme de cas d'usage — Admin
 │   ├── user-stories/backlog.md      # backlog complet (epics, stories, Gherkin)
 │   └── methodologie.md              # posture de travail, outils, usage de l'IA
 ├── backend/
@@ -43,9 +51,23 @@ motogp-hexagonal/
   règle de dépendance, ce qui est décidé et ce qui ne l'est pas encore
 - [Backlog / user stories](./docs/user-stories/backlog.md) — epics et stories au
   format Gherkin, annotées par couche architecturale
-- [ADR](./docs/adr/) — journal des décisions structurantes
+- [ADR](./docs/adr/) — journal des décisions structurantes, avec les diagrammes
+  UML et la note de méthode qui les accompagnent (`assets/`,
+  `note-uml-classification.md`)
 - [Méthodologie](./docs/methodologie.md) — environnement de travail, méthode
   Agile, outils, posture vis-à-vis de l'IA
+
+## Ordre de lecture recommandé (modélisation du domaine)
+
+1. `docs/adr/assets/cas-usage-visiteur.png` et `cas-usage-admin.png` — le besoin
+   fonctionnel, par acteur
+2. `docs/adr/assets/domaine-classes.png` — la structure qui répond à ce besoin
+3. `docs/adr/ADR-modelisation-domaine-motogp.md` — pourquoi chaque décision
+   structurante a été prise
+4. `docs/adr/note-uml-classification.md` — les deux tests de classification
+   utilisés pour trancher (Entité/Service/Use Case, association/agrégation/
+   composition), réutilisables sur n'importe quel autre bloc du domaine
+5. `docs/user-stories/backlog.md` — la traduction en stories développables
 
 ## État d'avancement
 

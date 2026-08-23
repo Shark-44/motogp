@@ -9,12 +9,20 @@ d'acceptation en Gherkin.
 **Découpage** : en tranches verticales (chaque story traverse potentiellement
 toutes les couches hexagonales concernées), jamais en tranches horizontales
 par couche technique. Voir `docs/backend/architecture.md` pour le détail des
-couches.
+couches, et `docs/adr/0002-modelisation-domaine-motogp.md` pour la
+justification des choix de modélisation (Entité/Service/Use Case,
+association/agrégation/composition).
+
+**Deux acteurs distincts** (voir diagrammes de cas d'usage) :
+- **Visiteur** : lecture seule (calendrier, circuits, équipes, pilotes, classements)
+- **Admin** : écriture (planifier un GP, signer un contrat, saisir un résultat,
+  déclencher le recalcul du classement). Authentification/sécurité admin
+  volontairement non modélisée — hors scope de cette étude d'architecture.
 
 ### Definition of Ready
 
 - Story formulée en Gherkin, comprise sans ambiguïté
-- Bounded context identifié (Pilotes / Circuits / Calendrier / Championnat)
+- Bounded context identifié (Pilotes / Équipes & Contrats / Circuits / Calendrier / Championnat)
 - Couche(s) impactée(s) précisée(s) (domain / application / adapter in / adapter out)
 
 ### Definition of Done
@@ -32,14 +40,22 @@ couches.
 |---|---|---|---|---|
 | US-000 | dev | un endpoint qui traverse domain→application→adapter in/out sur un cas réel (liste des circuits) | valider le câblage hexagonal avant toute vraie feature | Toutes |
 
-### Epic A — Pilotes & Écuries
+### Epic A — Pilotes
 
 | ID | En tant que | Je veux | Afin de | Couches touchées |
 |---|---|---|---|---|
 | US-PIL-01 | visiteur | lister les pilotes de la saison | parcourir le plateau | domain (entité Pilote), adapter out (repo lecture) |
 | US-PIL-02 | visiteur | consulter la fiche d'un pilote | voir ses infos détaillées | idem |
-| US-PIL-03 | visiteur | voir l'historique des écuries d'un pilote | comprendre son parcours | domain (VO PeriodeContrat), règle de non-chevauchement |
+| US-PIL-03 | visiteur | voir l'historique des écuries d'un pilote | comprendre son parcours | domain (entité **Contrat**, classe d'association en composition avec Pilote/Equipe — pas un simple VO, elle porte une identité et un cycle de vie propre) ; règle de non-chevauchement de deux contrats actifs à encoder |
 | US-PIL-04 (V2) | admin | ajouter/éditer un pilote | maintenir les données à jour | adapter in (formulaire protégé) |
+
+> Correction v2 : `US-PIL-03` référençait initialement un "VO PeriodeContrat".
+> L'étude de modélisation (voir ADR) a établi que `Contrat` doit être une
+> **Entité** (composition entre `Equipe` et `Pilote`, porte `saison` et
+> `role` officiel/remplaçant/wildcard) plutôt qu'un Value Object, car il a
+> besoin d'une identité propre et d'être référencé directement par
+> `ResultatSession` pour éviter de réécrire l'historique en cas de transfert
+> de pilote en cours de saison.
 
 ### Epic B — Circuits
 
@@ -54,18 +70,34 @@ couches.
 |---|---|---|---|---|
 | US-CAL-01 | visiteur | consulter le calendrier des GP | savoir quand a lieu chaque course | domain (VO StatutGP) |
 | US-CAL-02 | visiteur | voir le statut d'un GP (à venir/en cours/terminé) | suivre la saison en direct | logique de transition d'état |
+| US-CAL-03 | admin | associer un circuit existant à une date de la saison | planifier une manche du championnat | adapter in (formulaire protégé), domain (agrégation GrandPrix ◇— Circuit) |
 
 ### Epic D — Championnat & Résultats (cœur métier)
 
 | ID | En tant que | Je veux | Afin de | Couches touchées |
 |---|---|---|---|---|
-| US-RES-01 | admin | saisir les résultats d'une session | enregistrer les données officielles | adapter in (formulaire protégé), domain (entité ResultatSession) |
-| US-RES-02 | système | calculer automatiquement les points d'un pilote après une course | appliquer le règlement MotoGP sans erreur humaine | domain service ReglementPointsMotoGP |
-| US-RES-03 | visiteur | consulter le classement pilotes après chaque GP | suivre la saison | application (use case CalculerClassementApresGP) |
-| US-RES-04 | visiteur | consulter le classement constructeurs | suivre la compétition écuries | idem, agrégation différente |
-| US-RES-05 | système | gérer les cas particuliers (DNF, pénalité, meilleur tour) | garantir un classement fiable | domain |
+| US-RES-01 | admin | saisir les résultats d'une session | enregistrer les données officielles | adapter in (formulaire protégé), domain (entité ResultatSession, référence le Contrat actif — pas Pilote/Equipe séparément) |
+| US-RES-02 | système | calculer automatiquement les points d'un pilote après une course | appliquer le règlement MotoGP sans erreur humaine | domain service ReglementPointsMotoGP (pur, sans repository) |
+| US-RES-03 | visiteur | consulter le classement pilotes après chaque GP | suivre la saison | application (use case, lit la projection ClassementPilote) |
+| US-RES-04 | visiteur | consulter le classement constructeurs | suivre la compétition écuries | idem, agrégation différente (ClassementEquipe, exclut les wildcards) |
+| US-RES-05 | système | gérer les cas particuliers (DNF, pénalité, meilleur tour) | garantir un classement fiable | domain — traitement simplifié, voir note ci-dessous |
+| US-RES-06 | admin | déclencher manuellement le recalcul du classement pilotes/équipes après un GP | mettre à jour les projections affichées aux visiteurs | application (use cases CalculerClassementPilote / CalculerClassementEquipe) — pas de trigger automatique |
 
-### Epic E — Dashboard & Statistiques (shadcn)
+> Simplifications assumées (cf. ADR) : la règle d'exclusion des wildcards du
+> classement équipe et le traitement des DNF (tri par tour d'abandon avant
+> attribution de position) sont des hypothèses de travail non détaillées
+> exhaustivement — l'objectif de l'exercice est la structure architecturale,
+> pas la conformité à 100 % au règlement FIM réel.
+
+### Epic E — Équipes & Contrats
+
+| ID | En tant que | Je veux | Afin de | Couches touchées |
+|---|---|---|---|---|
+| US-EQU-01 | visiteur | lister les équipes de la saison | découvrir le plateau | domain (entité Equipe), adapter out (repo lecture) |
+| US-EQU-02 | visiteur | consulter la fiche d'une équipe (pilotes sous contrat, classement) | suivre son évolution | domain (Equipe, Contrat), application (read model ClassementEquipe) |
+| US-CTR-01 | admin | signer un contrat entre un pilote et une équipe pour une saison (rôle officiel/remplaçant/wildcard) | garantir que les résultats se rattachent à la bonne équipe au bon moment | adapter in (formulaire protégé), domain (Contrat) |
+
+### Epic F — Dashboard & Statistiques (shadcn)
 
 | ID | En tant que | Je veux | Afin de | Couches touchées |
 |---|---|---|---|---|
@@ -76,7 +108,9 @@ couches.
 > Note d'architecture : les stories `US-STAT-*` ne réutilisent pas les use cases
 > d'écriture. Elles s'appuient sur un port out dédié à la lecture agrégée
 > (`StatistiquesPiloteQueryPort`), distinct du repository d'écriture — embryon
-> de CQRS léger. Voir ADR à venir sur ce sujet.
+> de CQRS léger. La classe `ClassementPilote`/`ClassementEquipe` (voir ADR
+> domaine) alimente directement ce read model : c'est une projection datée
+> par round, exactement ce que `US-STAT-01` a besoin d'afficher en line chart.
 
 ## Exemple détaillé — US-RES-02
 
@@ -103,6 +137,22 @@ Afin d'appliquer le règlement MotoGP sans intervention manuelle
     Et ce pilote est classé dans le top 10
     Quand le classement est recalculé
     Alors ce pilote reçoit 1 point supplémentaire
+```
+
+## Exemple détaillé — US-RES-04 (nouveau, exclusion wildcard)
+
+```gherkin
+US-RES-04
+En tant que visiteur
+Je veux consulter le classement constructeurs
+Afin de suivre la compétition écuries
+
+  Scénario : Un wildcard ne marque pas de points pour son équipe
+    Étant donné un ResultatSession dont le Contrat a le rôle "wildcard"
+    Et ce résultat a rapporté des points au pilote
+    Quand le classement équipe est recalculé
+    Alors ces points ne sont PAS comptabilisés dans ClassementEquipe
+    Mais ils restent comptabilisés dans ClassementPilote
 ```
 
 ## Exemple détaillé — US-000 (Walking Skeleton)

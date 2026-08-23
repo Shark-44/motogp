@@ -44,14 +44,21 @@ mieux que d'en parler seulement en entretien.
 ## Diagrammes UML
 
 Les diagrammes servent la compréhension, pas la conformité formelle à la norme
-UML. Priorité à deux types de diagrammes, rendus directement en Mermaid dans
-GitHub (pas d'outil UML externe pour rester dans un flux de documentation
-versionnée avec le code) :
+UML. Trois types de diagrammes priorisés à ce stade :
 
-- **Diagramme de classes** du domaine — entités et value objects, pour donner à
-  voir la modélisation métier
-- **Diagramme de séquence** du Walking Skeleton — pour montrer le flux d'une
-  requête à travers les couches hexagonales
+- **Diagrammes de cas d'usage** (un par acteur : Visiteur, Admin) — modélisés
+  en amont du diagramme de classes, pour faire émerger le besoin fonctionnel
+  et les user stories associées avant de figer la structure
+- **Diagramme de classes** du domaine — entités, services et classes
+  d'association, pour donner à voir la modélisation métier
+- **Diagramme de séquence** du Walking Skeleton (à venir) — pour montrer le
+  flux d'une requête à travers les couches hexagonales
+
+Ces diagrammes sont conçus sur Lucidchart puis exportés en PNG dans
+`docs/adr/assets/`, référencés depuis les ADR correspondants. Choix assumé :
+un outil de diagramme dédié offre plus de liberté de notation (agrégation vs
+composition, `<<extend>>`) que le rendu Mermaid natif de GitHub, ce qui compte
+davantage ici que d'avoir des diagrammes versionnés en texte.
 
 D'autres diagrammes (composants, déploiement) seront ajoutés si un besoin réel
 de communication se présente, plutôt que par exhaustivité formelle.
