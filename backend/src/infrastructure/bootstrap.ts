@@ -1,13 +1,23 @@
 import express from 'express';
-import { CircuitRepositoryMySQL } from '../adapters/out/persistence/circuit.repository.mysql.js';
+import { prisma } from './prisma-client.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { PrismaCircuitRepository } from '../adapters/out/persistence/prisma-circuit.repository.js';
 import { ListerCircuitsUseCase } from '../application/use-cases/lister-circuits.use-case.js';
 import { circuitRouter } from '../adapters/in/http/circuit.controller.js';
 
-const circuitRepository = new CircuitRepositoryMySQL();
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const circuitRepository = new PrismaCircuitRepository(prisma);
 const listerCircuits = new ListerCircuitsUseCase(circuitRepository);
 
 const app = express();
+app.use(express.json()); 
 app.use('/api', circuitRouter(listerCircuits));
+app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 const port = process.env.PORT ?? 3000;
 app.listen(port, () => {

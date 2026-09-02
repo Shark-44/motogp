@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { Circuit } from '../../../domaine/entities/circuit.entity.ts';
-import { CircuitRepositoryPort } from '../../../ports/out/circuit-repository.port';
+import { Circuit } from '../../../domaine/entities/circuit.entity.js';
+import { CircuitRepositoryPort } from '../../../domaine/ports/out/circuit-repository.port.js';
 
 export class PrismaCircuitRepository implements CircuitRepositoryPort {
   constructor(private readonly prisma: PrismaClient) {}
