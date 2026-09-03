@@ -2,9 +2,9 @@ import express from 'express';
 import { prisma } from './prisma-client.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { PrismaCircuitRepository } from '../adapters/out/persistence/prisma-circuit.repository.js';
-import { ListerCircuitsUseCase } from '../application/use-cases/lister-circuits.use-case.js';
-import { circuitRouter } from '../adapters/in/http/circuit.controller.js';
+import { PrismaCircuitRepository } from '../circuits/adapters/out/persistence/prisma-circuit.repository.js';
+import { ListerCircuitsUseCase } from '../circuits/application/use-cases/lister-circuits.use-case.js';
+import { circuitRouter } from '../circuits/adapters/in/http/circuit.controller.js';
 
 
 
