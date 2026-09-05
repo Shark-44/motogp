@@ -17,3 +17,12 @@ model Circuit {
   nombreVirages Int
   photo         String
 }
+
+model Rider {
+  id                String @id @default(uuid())
+  nom               String
+  prenom            String
+  pays              String
+  dateAnniversaire  DateTime
+  photo             String
+}
