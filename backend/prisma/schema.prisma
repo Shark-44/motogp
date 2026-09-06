@@ -26,3 +26,12 @@ model Rider {
   dateAnniversaire  DateTime
   photo             String
 }
+
+model Team {
+  id            String  @id @default(uuid())
+  nom           String
+  pays          String
+  constructeur  String
+  estOfficielle Boolean @default(false)
+  logo          String
+}
