@@ -5,7 +5,6 @@ export function teamRouter(listerTeams: ListerTeamsPort) {
   const router = Router();
 
   router.get('/teams', async (_req, res) => {
-    console.log("je rentre dans le backend")
     const teams = await listerTeams.execute();
     res.json(teams);
   });
