@@ -9,6 +9,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  officiel
+  remplacant
+  wildcard
+}
+
 model Circuit {
   id            String @id @default(uuid())
   nom           String
@@ -25,6 +31,7 @@ model Rider {
   pays              String
   dateAnniversaire  DateTime
   photo             String
+  contracts         Contract[]
 }
 
 model Team {
@@ -34,4 +41,15 @@ model Team {
   constructeur  String
   estOfficielle Boolean @default(false)
   logo          String
+  contracts     Contract[]
+}
+
+model Contract {
+  id       String @id @default(uuid())
+  saison   Int
+  role     Role
+  rider    Rider  @relation(fields: [piloteId], references: [id])
+  piloteId String
+  team     Team   @relation(fields: [equipeId], references: [id])
+  equipeId String
 }
