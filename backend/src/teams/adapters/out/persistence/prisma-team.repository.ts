@@ -12,4 +12,9 @@ export class PrismaTeamRepository implements TeamRepositoryPort {
         new Team(row.id, row.nom, row.pays, row.constructeur, row.estOfficielle, row.logo),
     );
   }
+  async findById(id: string): Promise<Team| null> {
+    const row = await this.prisma.team.findUnique({ where: { id } });
+    if (!row) return null;
+    return new Team(row.id, row.nom, row.pays, row.constructeur, row.estOfficielle, row.logo);
+  }
 }

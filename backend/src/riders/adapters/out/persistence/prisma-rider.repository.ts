@@ -12,4 +12,9 @@ export class PrismaRiderRepository implements RiderRepositoryPort {
         new Rider(row.id, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo),
     );
   }
+  async findById(id: string): Promise<Rider | null> {
+    const row = await this.prisma.rider.findUnique({ where: { id } });
+    if (!row) return null;
+    return new Rider(row.id, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo);
+  }
 }
