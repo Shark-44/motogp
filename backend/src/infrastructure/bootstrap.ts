@@ -35,7 +35,7 @@ const listerTeams = new ListerTeamsUseCase(teamRepository);
 
 const contractRepository = new PrismaContractRepository(prisma);
 const listerContracts = new ListerContractsUseCase(contractRepository);
-const creerContract = new CreerContractUseCase(contractRepository)
+const creerContract = new CreerContractUseCase(contractRepository, riderRepository, teamRepository)
 
 const app = express();
 app.use(express.json()); 

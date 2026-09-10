@@ -11,9 +11,13 @@ export function contractRouter(listerContracts: ListerContractsPort, creerContra
   });
 
   router.post('/contracts', async (req, res) => {
-    const { riderId, teamId, saison, role } = req.body;
-    const contract = await creerContract.execute(riderId, teamId, saison, role);
-    res.status(201).json(contract);
+    try {
+      const { piloteId, equipeId, saison, role } = req.body;
+      const contract = await creerContract.execute(piloteId, equipeId, saison, role);
+      res.status(201).json(contract);
+    } catch (error) {
+      res.status(400).json({ message: (error as Error).message });
+    }
   });
 
   return router;

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ListerRidersUseCase } from './lister-riders.use-case.js';
 import { Rider } from '../../domaine/entities/rider.entity.js';
 import type { RiderRepositoryPort } from '../../domaine/ports/out/rider-repository.port.js';
@@ -7,6 +7,7 @@ describe('ListerRidersUseCase', () => {
   it('retourne les pilotes fournis par le port, sans base de données réelle', async () => {
     const fakeRepository: RiderRepositoryPort = {
       findAll: async () => [new Rider('1', 'Quataro', 'Fabio', 'France',  new Date('2000-01-01'), 'photo')],
+      findById: vi.fn(),
     };
 
     const useCase = new ListerRidersUseCase(fakeRepository);
