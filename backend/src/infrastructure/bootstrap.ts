@@ -17,6 +17,7 @@ import { teamRouter } from '../teams/adapters/in/http/team.controller.js';
 
 import { PrismaContractRepository } from '../contract/adapters/out/persistence/prisma-contract.repository.js';
 import { ListerContractsUseCase } from '../contract/application/use-cases/lister-contracts.use-case.js';
+import { CreerContractUseCase } from '../contract/application/use-cases/creer-contract.use-case.js';
 import { contractRouter } from '../contract/adapters/in/http/contract.controller.js';
 
 
@@ -34,13 +35,14 @@ const listerTeams = new ListerTeamsUseCase(teamRepository);
 
 const contractRepository = new PrismaContractRepository(prisma);
 const listerContracts = new ListerContractsUseCase(contractRepository);
+const creerContract = new CreerContractUseCase(contractRepository)
 
 const app = express();
 app.use(express.json()); 
 app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
-app.use('/api', contractRouter(listerContracts));
+app.use('/api', contractRouter(listerContracts, creerContract));
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 const port = process.env.PORT ?? 3000;
