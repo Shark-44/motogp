@@ -7,7 +7,7 @@ export class RaceEvent {
     public readonly nom: string,
     public readonly saison: number,
     public readonly date: Date,
-    public readonly statut: StatutGP,
+    public statut: StatutGP,
     public readonly circuitId: string
     ) {}
 }

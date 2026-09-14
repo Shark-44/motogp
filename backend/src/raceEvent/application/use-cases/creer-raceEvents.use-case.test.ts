@@ -15,6 +15,8 @@ describe('CreerRaceEventsUseCase', () => {
         async (nom, saison, date, statut, circuitId) =>
           new RaceEvent('1', nom, saison, date, statut, circuitId),
       ),
+      findById: vi.fn(),
+      updateEvent: vi.fn(),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);
@@ -37,6 +39,8 @@ describe('CreerRaceEventsUseCase', () => {
       findAll: vi.fn(),
       findByDate: vi.fn().mockResolvedValue(evenementExistant),
       createEvent: vi.fn(),
+      findById: vi.fn(),
+      updateEvent: vi.fn(),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);

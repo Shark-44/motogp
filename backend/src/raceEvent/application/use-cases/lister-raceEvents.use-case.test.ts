@@ -8,7 +8,9 @@ describe('ListerCircuitsUseCase', () => {
     const fakeRepository: RaceEventRepositoryPort = {
       findAll: async () => [new RaceEvent('1', 'Le Mans', 2026 , new Date('2000-01-01'), 'TERMINE','01')],
       findByDate: vi.fn(),
-      createEvent: vi.fn()
+      createEvent: vi.fn(),
+      findById: vi.fn(),
+      updateEvent: vi.fn(),
     };
 
     const useCase = new ListerRaceEventsUseCase(fakeRepository);
