@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ListerRaceEventsUseCase } from './lister-raceEvents.use-case.js';
 import { RaceEvent } from '../../domaine/entities/raceEvent.entity.js';
 import type { RaceEventRepositoryPort } from '../../domaine/ports/out/raceEvent-repository.port.js';
@@ -7,6 +7,8 @@ describe('ListerCircuitsUseCase', () => {
   it('retourne les circuits fournis par le port, sans base de données réelle', async () => {
     const fakeRepository: RaceEventRepositoryPort = {
       findAll: async () => [new RaceEvent('1', 'Le Mans', 2026 , new Date('2000-01-01'), 'TERMINE','01')],
+      findByDate: vi.fn(),
+      createEvent: vi.fn()
     };
 
     const useCase = new ListerRaceEventsUseCase(fakeRepository);
