@@ -7,6 +7,8 @@ export class Contract {
     public readonly id: string,
     public readonly saison: number,
     public readonly role: RoleContract,
+    public readonly dateDebut: Date,
+    public          dateFin:   Date,
     public readonly piloteId: string,
     public readonly equipeId: string,
   ) {}

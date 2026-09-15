@@ -3,5 +3,5 @@
 import type { Contract, RoleContract } from '../../../domaine/entities/contract.entity.js';
 
 export interface CreerContractPort {
-  execute(piloteId: string, equipeId: string, saison: number, role: RoleContract): Promise<Contract>;
+  execute(piloteId: string, equipeId: string, saison: number, role: RoleContract, dateDebut: Date, dateFin: Date): Promise<Contract>;
 }

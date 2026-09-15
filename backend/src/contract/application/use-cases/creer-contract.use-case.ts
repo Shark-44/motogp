@@ -11,13 +11,13 @@ export class CreerContractUseCase implements CreerContractPort {
     private readonly teamRepository: TeamRepositoryPort,
   ) {}
 
-  async execute(piloteId: string, equipeId: string, saison: number, role: RoleContract): Promise<Contract> {
+  async execute(piloteId: string, equipeId: string, saison: number, role: RoleContract, dateDebut: Date, dateFin: Date): Promise<Contract> {
     const pilote = await this.riderRepository.findById(piloteId);
     const equipe = await this.teamRepository.findById(equipeId);
 
     if (!pilote) throw new Error(`Aucun pilote trouvé avec l'id ${piloteId}`);
     if (!equipe) throw new Error(`Aucune équipe trouvée avec l'id ${equipeId}`);
 
-    return this.contractRepository.create(piloteId, equipeId, saison, role);
+    return this.contractRepository.create(piloteId, equipeId, saison, role, dateDebut, dateFin);
   }
 }

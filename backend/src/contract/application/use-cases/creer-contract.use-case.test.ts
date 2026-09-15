@@ -16,8 +16,8 @@ describe('CreerContractUseCase', () => {
     mockContractRepo = {
       findAll: vi.fn(),
       create: vi.fn().mockImplementation(
-        async (piloteId: string, equipeId: string, saison: number, role: RoleContract) =>
-          new Contract('1', saison, role, piloteId, equipeId)
+        async (piloteId: string, equipeId: string, saison: number, role: RoleContract, dateDebut: Date, dateFin: Date) =>
+          new Contract('1', saison, role, dateDebut, dateFin, piloteId, equipeId)
       ),
     };
 
@@ -44,7 +44,7 @@ describe('CreerContractUseCase', () => {
     const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
 
     
-    const result = await useCase.execute('rider-44', 'team-ducati', 2026, 'officiel');
+    const result = await useCase.execute('rider-44', 'team-ducati', 2026, 'officiel', new Date('2026-01-01'),new Date('2026-12-01'));
 
     
     expect(result).toBeInstanceOf(Contract);
@@ -63,7 +63,7 @@ describe('CreerContractUseCase', () => {
     const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
 
     await expect(
-      useCase.execute('rider-inconnu', 'team-ducati', 2026, 'officiel')
+      useCase.execute('rider-inconnu', 'team-ducati', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'))
     ).rejects.toThrow("Aucun pilote trouvé avec l'id rider-inconnu");
 
     expect(mockContractRepo.create).not.toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('CreerContractUseCase', () => {
     const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
 
     await expect(
-      useCase.execute('rider-44', 'team-inconnue', 2026, 'officiel')
+      useCase.execute('rider-44', 'team-inconnue', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'))
     ).rejects.toThrow("Aucune équipe trouvée avec l'id team-inconnue");
 
     expect(mockContractRepo.create).not.toHaveBeenCalled();

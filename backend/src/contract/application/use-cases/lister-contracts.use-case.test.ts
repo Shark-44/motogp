@@ -8,8 +8,8 @@ import type { ContractRepositoryPort } from '../../domaine/ports/out/contract-re
 describe('ListerContractsUseCase', () => {
   it('retourne les contrats fournis par le port, sans base de données réelle', async () => {
     const fakeRepository: ContractRepositoryPort = {
-      findAll: async () => [new Contract('1', 2026, 'officiel', '1', '1')],
-      create: async (piloteId, equipeId, saison, role) => new Contract('1', saison, role, piloteId, equipeId),
+      findAll: async () => [new Contract('1', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'), '1', '1')],
+      create: async (piloteId, equipeId, saison, role, dateDebut, dateFin) => new Contract('1', saison, role, dateDebut, dateFin, piloteId, equipeId),
     };
 
     const useCase = new ListerContractsUseCase(fakeRepository);
