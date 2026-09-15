@@ -9,13 +9,13 @@ export class PrismaContractRepository implements ContractRepositoryPort {
     const rows = await this.prisma.contract.findMany();
     return rows.map(
       (row) =>
-        new Contract(row.id, row.saison, row.role, row.piloteId, row.equipeId),
+        new Contract(row.id, row.saison, row.role, row.dateDebut, row.dateFin, row.piloteId, row.equipeId ),
     );
   }
-  async create(piloteId: string, equipeId: string, saison: number, role: RoleContract): Promise<Contract> {
+  async create(piloteId: string, equipeId: string, saison: number, role: RoleContract, dateDebut: Date, dateFin: Date): Promise<Contract> {
     const row = await this.prisma.contract.create({
-      data: { piloteId, equipeId, saison, role },
+      data: { piloteId, equipeId, saison, role, dateDebut, dateFin },
     });
-    return new Contract(row.id, row.saison, row.role, row.piloteId, row.equipeId);
+    return new Contract(row.id, row.saison, row.role, row.dateDebut , row.dateFin, row.piloteId, row.equipeId);
   }
 }

@@ -55,6 +55,8 @@ model Contract {
   id       String @id @default(uuid())
   saison   Int
   role     Role
+  dateDebut DateTime
+  dateFin   DateTime?
   rider    Rider  @relation(fields: [piloteId], references: [id])
   piloteId String
   team     Team   @relation(fields: [equipeId], references: [id])

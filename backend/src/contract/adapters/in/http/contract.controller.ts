@@ -12,8 +12,8 @@ export function contractRouter(listerContracts: ListerContractsPort, creerContra
 
   router.post('/contracts', async (req, res) => {
     try {
-      const { piloteId, equipeId, saison, role } = req.body;
-      const contract = await creerContract.execute(piloteId, equipeId, saison, role);
+      const { piloteId, equipeId, saison, role, dateDebut, dateFin } = req.body;
+      const contract = await creerContract.execute(piloteId, equipeId, saison, role, dateDebut, dateFin);
       res.status(201).json(contract);
     } catch (error) {
       res.status(400).json({ message: (error as Error).message });
