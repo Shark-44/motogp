@@ -15,6 +15,12 @@ enum Role {
   wildcard
 }
 
+enum StatutGP {
+  PLANIFIE
+  TERMINE
+  ANNULE
+}
+
 model Circuit {
   id            String @id @default(uuid())
   nom           String
@@ -22,6 +28,7 @@ model Circuit {
   longueurKm    Float
   nombreVirages Int
   photo         String
+  raceEvents    RaceEvent[]
 }
 
 model Rider {
@@ -52,4 +59,14 @@ model Contract {
   piloteId String
   team     Team   @relation(fields: [equipeId], references: [id])
   equipeId String
+}
+
+model RaceEvent {
+  id        String   @id @default(uuid())
+  nom       String   
+  saison    Int      
+  date      DateTime
+  statut    StatutGP
+  circuit   Circuit  @relation(fields: [circuitId], references: [id])
+  circuitId String
 }
