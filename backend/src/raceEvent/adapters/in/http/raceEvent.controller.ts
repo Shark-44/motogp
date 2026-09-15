@@ -14,7 +14,7 @@ export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRac
   router.post('/raceEvents', async (req, res) => {
     try {
       const { nom, saison, date, statut, circuitId } = req.body;
-      const raceEvent = await creerRaceEvent.execute(nom, saison, date, statut, circuitId);
+      const raceEvent = await creerRaceEvent.execute(nom, saison, new Date(date), statut, circuitId);
       res.status(201).json(raceEvent);
     } catch (error) {
       res.status(400).json({ message: (error as Error).message });
@@ -24,7 +24,8 @@ export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRac
   router.put('/raceEvents/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const raceEvent = await updateRaceEvent.execute(id);
+      const { statut } = req.body;
+      const raceEvent = await updateRaceEvent.execute(id, statut);
       res.status(200).json(raceEvent);
     } catch (error) {
       res.status(400).json({ message: (error as Error).message });

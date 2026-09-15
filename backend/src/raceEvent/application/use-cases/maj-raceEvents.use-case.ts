@@ -1,8 +1,6 @@
 import type { MajRaceEventPort} from '../ports/in/maj-raceEvents.port.js';
 import type { RaceEventRepositoryPort } from '../../domaine/ports/out/raceEvent-repository.port.js';
 
-
-
 export class MajRaceEventsUseCase implements MajRaceEventPort {
   constructor(private readonly raceEventRepository: RaceEventRepositoryPort) {}
 
