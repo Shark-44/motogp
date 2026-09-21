@@ -17,6 +17,8 @@ describe('CreerRaceEventsUseCase', () => {
       ),
       findById: vi.fn(),
       updateEvent: vi.fn(),
+      chercherDernierEventTermine: vi.fn(),
+      chercherProchainEventPlanifie: vi.fn(),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);
@@ -41,6 +43,8 @@ describe('CreerRaceEventsUseCase', () => {
       createEvent: vi.fn(),
       findById: vi.fn(),
       updateEvent: vi.fn(),
+      chercherDernierEventTermine: vi.fn(),
+      chercherProchainEventPlanifie: vi.fn(),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);

@@ -19,6 +19,10 @@ describe('CreerContractUseCase', () => {
         async (piloteId: string, equipeId: string, saison: number, role: RoleContract, dateDebut: Date, dateFin: Date) =>
           new Contract('1', saison, role, dateDebut, dateFin, piloteId, equipeId)
       ),
+      findActiveContractForRider: vi.fn(),
+      findNbreContratByTeam: vi.fn(),
+      findLastContractForRider: vi.fn(),
+      findAllContractsForRider: vi.fn(),
     };
 
     mockRiderRepo = {
