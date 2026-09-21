@@ -1,11 +1,13 @@
-import { ContractRepositoryPort } from "../../domaine/ports/out/contract-repository.port.js";
-import { RoleContract } from "../../domaine/entities/contract.entity.js";
+import { ContractRepositoryPort } from "../ports/out/contract-repository.port.js";
+import { RoleContract } from "../entities/contract.entity.js";
 import { RaceEventRepositoryPort } from "../../../raceEvent/domaine/ports/out/raceEvent-repository.port.js";
+import { CircuitRepositoryPort } from "../../../circuits/domaine/ports/out/circuit-repository.port.js";
 
 export class ContractValidatorService {
   constructor(
     private readonly contractRepository: ContractRepositoryPort,
-    private readonly raceEventRepository: RaceEventRepositoryPort
+    private readonly raceEventRepository: RaceEventRepositoryPort,
+    private readonly circuitRepository: CircuitRepositoryPort
   ) {}
 
   private readonly PLAFONDS: Record<RoleContract, number> = {

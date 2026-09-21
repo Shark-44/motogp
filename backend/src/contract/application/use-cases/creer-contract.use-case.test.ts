@@ -6,11 +6,13 @@ import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/ride
 import type { TeamRepositoryPort } from '../../../teams/domaine/ports/out/team-repository.port.js';
 import { Rider } from '../../../riders/domaine/entities/rider.entity.js';
 import { Team } from '../../../teams/domaine/entities/team.entity.js';
+import { ContractValidatorService } from '../../domaine/services/service-creer-contract.js';
 
 describe('CreerContractUseCase', () => {
   let mockContractRepo: ContractRepositoryPort;
   let mockRiderRepo: RiderRepositoryPort;
   let mockTeamRepo: TeamRepositoryPort;
+  let mockContractValidator: ContractValidatorService;
 
   beforeEach(() => {
     mockContractRepo = {
@@ -34,6 +36,11 @@ describe('CreerContractUseCase', () => {
       findById: vi.fn(),
       findAll: vi.fn(),
     };
+
+    mockContractValidator = {
+      validerNouveauContrat: vi.fn().mockResolvedValue(true),
+    } as unknown as ContractValidatorService;
+
   });
 
   it('crée un contrat lorsque le pilote et l\'équipe existent', async () => {
@@ -45,7 +52,7 @@ describe('CreerContractUseCase', () => {
       new Team('team-ducati', 'Ducati Lenovo Team', 'Italy', 'Ducati', true, 'logo') 
     );
 
-    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
+    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo, mockContractValidator);
 
     
     const result = await useCase.execute('rider-44', 'team-ducati', 2026, 'officiel', new Date('2026-01-01'),new Date('2026-12-01'));
@@ -64,7 +71,7 @@ describe('CreerContractUseCase', () => {
       new Team('team-ducati', 'Ducati Lenovo Team', 'Italy', 'Ducati', true, 'logo')
     );
 
-    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
+    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo, mockContractValidator);
 
     await expect(
       useCase.execute('rider-inconnu', 'team-ducati', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'))
@@ -79,7 +86,7 @@ describe('CreerContractUseCase', () => {
     );
     vi.mocked(mockTeamRepo.findById).mockResolvedValue(null);
 
-    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo);
+    const useCase = new CreerContractUseCase(mockContractRepo, mockRiderRepo, mockTeamRepo, mockContractValidator);
 
     await expect(
       useCase.execute('rider-44', 'team-inconnue', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'))
