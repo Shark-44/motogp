@@ -91,4 +91,25 @@ export class ContractValidatorService {
       throw new Error(`L'équipe a déjà atteint le nombre maximum de contrats pour le rôle ${role}.`);
     }
   }
+
+  async validerNouvelleDateFin( nouvelleDateFin: Date): Promise<void> {
+    const dernierEvent = await this.raceEventRepository.chercherDernierEventTermine();
+    const prochainEvent = await this.raceEventRepository.chercherProchainEventPlanifie();
+  
+    if (dernierEvent && dernierEvent.statut === 'TERMINE') {
+      if (nouvelleDateFin < dernierEvent.date) {
+        throw new Error(
+          `Impossible de rompre le contrat : la date de fin ne peut pas être antérieure au dernier événement terminé (${dernierEvent.nom}).`
+        );
+      }
+    }
+  
+    if (prochainEvent && prochainEvent.statut === 'PLANIFIE') {
+      if (nouvelleDateFin >= prochainEvent.date) {
+        throw new Error(
+          `La date de fin doit être antérieure au prochain événement planifié (${prochainEvent.nom}).`
+        );
+      }
+    }
+  }
 }

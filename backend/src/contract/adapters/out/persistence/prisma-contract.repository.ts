@@ -49,4 +49,17 @@ export class PrismaContractRepository implements ContractRepositoryPort {
     });
     return rows.map(this.toEntity);
   }
+
+  async updateFinContrat(contractId: string, nouvelleDateFin: Date): Promise<Contract> {
+    const row = await this.prisma.contract.update({
+      where: { 
+        id: contractId 
+      },
+      data: { 
+        dateFin: nouvelleDateFin 
+      },
+    });
+  
+    return this.toEntity(row);
+  }
 }
