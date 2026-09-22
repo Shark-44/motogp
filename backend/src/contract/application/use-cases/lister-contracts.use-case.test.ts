@@ -1,6 +1,6 @@
 // application/use-cases/lister-contracts.use-case.test.ts
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ListerContractsUseCase } from './lister-contracts.use-case.js';
 import { Contract } from '../../domaine/entities/contract.entity.js';
 import type { ContractRepositoryPort } from '../../domaine/ports/out/contract-repository.port.js';
@@ -10,6 +10,11 @@ describe('ListerContractsUseCase', () => {
     const fakeRepository: ContractRepositoryPort = {
       findAll: async () => [new Contract('1', 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-01'), '1', '1')],
       create: async (piloteId, equipeId, saison, role, dateDebut, dateFin) => new Contract('1', saison, role, dateDebut, dateFin, piloteId, equipeId),
+      findActiveContractForRider: vi.fn(),
+      findNbreContratByTeam: vi.fn(),
+      findLastContractForRider: vi.fn(),
+      findAllContractsForRider: vi.fn(),
+      updateFinContrat: vi.fn(),
     };
 
     const useCase = new ListerContractsUseCase(fakeRepository);

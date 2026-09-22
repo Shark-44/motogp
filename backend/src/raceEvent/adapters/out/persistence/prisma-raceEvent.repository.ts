@@ -46,4 +46,23 @@ export class PrismaRaceEventRepository implements RaceEventRepositoryPort {
     
     return new RaceEvent(row.id, row.nom, row.saison, row.date, row.statut, row.circuitId);
   }
+
+  async chercherDernierEventTermine(): Promise<RaceEvent | null> {
+    const row = await this.prisma.raceEvent.findFirst({
+      where: { statut: 'TERMINE' },
+      orderBy: { date: 'desc' },
+    });
+    if (!row) return null;
+    return new RaceEvent(row.id, row.nom, row.saison, row.date, row.statut, row.circuitId);
+  }
+  
+  async chercherProchainEventPlanifie(): Promise<RaceEvent | null> {
+    const row = await this.prisma.raceEvent.findFirst({
+      where: { statut: 'PLANIFIE' },
+      orderBy: { date: 'asc' },
+    });
+    if (!row) return null;
+    return new RaceEvent(row.id, row.nom, row.saison, row.date, row.statut, row.circuitId);
+  
+  }
 }

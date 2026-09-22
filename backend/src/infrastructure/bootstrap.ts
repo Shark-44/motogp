@@ -25,36 +25,52 @@ import { ListerRaceEventsUseCase } from '../raceEvent/application/use-cases/list
 import { raceEventRouter } from '../raceEvent/adapters/in/http/raceEvent.controller.js';
 import { CreerRaceEventsUseCase } from '../raceEvent/application/use-cases/creer-raceEvents.use-case.js';
 import { MajRaceEventsUseCase } from '../raceEvent/application/use-cases/maj-raceEvents.use-case.js';
-
+import { ContractValidatorService } from '../contract/domaine/services/service-contract.js';
+import { MajFinContractUseCase } from '../contract/application/use-cases/maj.fin-contract.use-case.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 const circuitRepository = new PrismaCircuitRepository(prisma);
-const listerCircuits = new ListerCircuitsUseCase(circuitRepository);
-
 const riderRepository = new PrismaRiderRepository(prisma);
-const listerRiders = new ListerRidersUseCase(riderRepository);
-
 const teamRepository = new PrismaTeamRepository(prisma);
-const listerTeams = new ListerTeamsUseCase(teamRepository);
-
 const contractRepository = new PrismaContractRepository(prisma);
-const listerContracts = new ListerContractsUseCase(contractRepository);
-const creerContract = new CreerContractUseCase(contractRepository, riderRepository, teamRepository)
-
 const raceEventRepository = new PrismaRaceEventRepository(prisma);
+
+
+const contractValidatorService = new ContractValidatorService(
+  contractRepository,
+  raceEventRepository,
+  circuitRepository
+);
+
+const listerCircuits = new ListerCircuitsUseCase(circuitRepository);
+const listerRiders = new ListerRidersUseCase(riderRepository);
+const listerTeams = new ListerTeamsUseCase(teamRepository);
+const listerContracts = new ListerContractsUseCase(contractRepository);
+
+const creerContract = new CreerContractUseCase(
+  contractRepository,
+  riderRepository,
+  teamRepository,
+  contractValidatorService
+);
+
 const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
-const CreerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
-const MajRaceEvents = new MajRaceEventsUseCase(raceEventRepository)
+const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
+const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
+const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
 
 const app = express();
 app.use(express.json()); 
+
 app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
-app.use('/api', contractRouter(listerContracts, creerContract));
-app.use('/api', raceEventRouter(listerRaceEvents, CreerRaceEvents, MajRaceEvents));
+app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
+app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
+
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 const port = process.env.PORT ?? 3000;
