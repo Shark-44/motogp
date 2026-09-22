@@ -3,7 +3,7 @@ import type { ContractRepositoryPort } from '../../domaine/ports/out/contract-re
 import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/rider-repository.port.js';
 import type { TeamRepositoryPort } from '../../../teams/domaine/ports/out/team-repository.port.js';
 import type { Contract, RoleContract } from '../../domaine/entities/contract.entity.js';
-import type { ContractValidatorService } from '../../domaine/services/service-creer-contract.js';
+import type { ContractValidatorService } from '../../domaine/services/service-contract.js';
 
 export class CreerContractUseCase implements CreerContractPort {
   constructor(

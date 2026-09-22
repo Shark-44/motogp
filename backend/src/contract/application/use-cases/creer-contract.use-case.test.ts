@@ -6,7 +6,7 @@ import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/ride
 import type { TeamRepositoryPort } from '../../../teams/domaine/ports/out/team-repository.port.js';
 import { Rider } from '../../../riders/domaine/entities/rider.entity.js';
 import { Team } from '../../../teams/domaine/entities/team.entity.js';
-import { ContractValidatorService } from '../../domaine/services/service-creer-contract.js';
+import { ContractValidatorService } from '../../domaine/services/service-contract.js';
 
 describe('CreerContractUseCase', () => {
   let mockContractRepo: ContractRepositoryPort;

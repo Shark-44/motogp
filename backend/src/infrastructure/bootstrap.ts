@@ -25,7 +25,7 @@ import { ListerRaceEventsUseCase } from '../raceEvent/application/use-cases/list
 import { raceEventRouter } from '../raceEvent/adapters/in/http/raceEvent.controller.js';
 import { CreerRaceEventsUseCase } from '../raceEvent/application/use-cases/creer-raceEvents.use-case.js';
 import { MajRaceEventsUseCase } from '../raceEvent/application/use-cases/maj-raceEvents.use-case.js';
-import { ContractValidatorService } from '../contract/domaine/services/service-creer-contract.js';
+import { ContractValidatorService } from '../contract/domaine/services/service-contract.js';
 import { MajFinContractUseCase } from '../contract/application/use-cases/maj.fin-contract.use-case.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -60,8 +60,7 @@ const creerContract = new CreerContractUseCase(
 const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
 const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
 const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
-const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService);
-
+const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
 
 const app = express();
 app.use(express.json()); 
