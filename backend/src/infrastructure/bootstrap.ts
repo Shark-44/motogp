@@ -31,6 +31,7 @@ import { MajFinContractUseCase } from '../contract/application/use-cases/maj.fin
 import { PrismaSessionResultsRepository} from '../sessionResults/adapters/out/persistence/prisma-sessionResults.repository.js'
 import { ListerSessionResultUseCase } from '../sessionResults/application/use-cases/lister-sessionResults.use-case.js';
 import { sessionResultsRouter } from '../sessionResults/adapters/in/http/sessionResults.controller.js'
+import { SaisieSessionResultsUseCase } from '../sessionResults/application/use-cases/saisie-sessionResults.use-case.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,20 +53,24 @@ const contractValidatorService = new ContractValidatorService(
 const listerCircuits = new ListerCircuitsUseCase(circuitRepository);
 const listerRiders = new ListerRidersUseCase(riderRepository);
 const listerTeams = new ListerTeamsUseCase(teamRepository);
-const listerContracts = new ListerContractsUseCase(contractRepository);
 
+
+
+const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
+const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
+const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
+
+const listerContracts = new ListerContractsUseCase(contractRepository);
 const creerContract = new CreerContractUseCase(
   contractRepository,
   riderRepository,
   teamRepository,
   contractValidatorService
 );
-
-const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
-const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
-const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
 const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
+
 const listerSessionResults = new ListerSessionResultUseCase(sessionResultsRepository)
+const saisieSessionResults = new SaisieSessionResultsUseCase(raceEventRepository,sessionResultsRepository)
 
 const app = express();
 app.use(express.json()); 
@@ -75,7 +80,7 @@ app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
 app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
-app.use('/api', sessionResultsRouter(listerSessionResults));
+app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults));
 
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
