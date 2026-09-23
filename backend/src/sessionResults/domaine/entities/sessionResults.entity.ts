@@ -5,8 +5,7 @@ export type StatutResultat = 'TERMINE' | 'ABANDON' | 'NON_PARTANT';
 
 export class SessionResults {
   constructor(
-    
-    public readonly id: string,
+    public readonly id: string | undefined,
     public readonly eventId: string,
     public readonly typeSession: TypeSession,
     public readonly statut: StatutResultat,

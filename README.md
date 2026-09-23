@@ -76,6 +76,10 @@ backlog rédigé, structure de dossiers posée. Le code n'a pas encore démarré
 voir le [journal d'évolution](./docs/backend/architecture.md#journal-dévolution)
 pour le suivi daté des décisions.
 
+## Trello
+
+https://trello.com/invite/b/6a70fe862e299d53f2c26340/ATTI5360576bb7016ae1ee7118735e2b3c0eF0ACAFFF/motogp-etude-hexagonale
+
 ## Auteur
 
 Joanny — développeur en reconversion (ex-technicien automatisme industriel

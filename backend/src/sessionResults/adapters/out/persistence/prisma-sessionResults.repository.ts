@@ -20,4 +20,21 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
         ),
     );
   }
+  async saveAll(results: SessionResults[]): Promise<SessionResults[]> {
+    
+    await this.prisma.$transaction(
+      results.map((res) =>
+        this.prisma.sessionResults.create({
+          data: {
+            eventId: res.eventId,
+            typeSession: res.typeSession,
+            statut: res.statut,
+            position: res.position,
+            piloteId: res.piloteId,
+          },
+        })
+      )
+    );
+    return results;
+  }
 }
