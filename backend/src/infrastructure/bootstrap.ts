@@ -28,6 +28,10 @@ import { MajRaceEventsUseCase } from '../raceEvent/application/use-cases/maj-rac
 import { ContractValidatorService } from '../contract/domaine/services/service-contract.js';
 import { MajFinContractUseCase } from '../contract/application/use-cases/maj.fin-contract.use-case.js';
 
+import { PrismaSessionResultsRepository} from '../sessionResults/adapters/out/persistence/prisma-sessionResults.repository.js'
+import { ListerSessionResultUseCase } from '../sessionResults/application/use-cases/lister-sessionResults.use-case.js';
+import { sessionResultsRouter } from '../sessionResults/adapters/in/http/sessionResults.controller.js'
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -37,7 +41,7 @@ const riderRepository = new PrismaRiderRepository(prisma);
 const teamRepository = new PrismaTeamRepository(prisma);
 const contractRepository = new PrismaContractRepository(prisma);
 const raceEventRepository = new PrismaRaceEventRepository(prisma);
-
+const sessionResultsRepository = new PrismaSessionResultsRepository(prisma);
 
 const contractValidatorService = new ContractValidatorService(
   contractRepository,
@@ -61,6 +65,7 @@ const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
 const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
 const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
 const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
+const listerSessionResults = new ListerSessionResultUseCase(sessionResultsRepository)
 
 const app = express();
 app.use(express.json()); 
@@ -70,6 +75,7 @@ app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
 app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
+app.use('/api', sessionResultsRouter(listerSessionResults));
 
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 

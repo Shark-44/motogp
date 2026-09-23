@@ -21,6 +21,17 @@ enum StatutGP {
   ANNULE
 }
 
+enum TypeSession {
+  SPRINT
+  RACE
+}
+
+enum StatutResultat {
+  TERMINE
+  ABANDON
+  NON_PARTANT
+}
+
 model Circuit {
   id            String @id @default(uuid())
   nom           String
@@ -39,6 +50,7 @@ model Rider {
   dateAnniversaire  DateTime
   photo             String
   contracts         Contract[]
+  sessionResults   SessionResults[]
 }
 
 model Team {
@@ -71,4 +83,19 @@ model RaceEvent {
   statut    StatutGP
   circuit   Circuit  @relation(fields: [circuitId], references: [id])
   circuitId String
+  sessionResults SessionResults[]
+}
+
+model SessionResults {
+  id          String         @id @default(uuid())
+  eventId     String
+  raceEvent   RaceEvent      @relation(fields: [eventId], references: [id])
+  typeSession TypeSession
+  statut      StatutResultat
+  position    Int?
+  rider       Rider          @relation(fields: [piloteId], references: [id])
+  piloteId    String
+
+  @@unique([eventId, typeSession, piloteId])
+  @@unique([eventId, typeSession, position])
 }
