@@ -47,7 +47,7 @@ describe('CreerContractUseCase', () => {
   it('crée un contrat lorsque le pilote et l\'équipe existent', async () => {
     
     vi.mocked(mockRiderRepo.findById).mockResolvedValue(
-      new Rider('rider-44', 'Espargaró', 'Pol', 'ES',new Date('1991-06-10'), 'photo') 
+      new Rider('rider-44', '44', 'Espargaró', 'Pol', 'ES',new Date('1991-06-10'), 'photo') 
     );
     vi.mocked(mockTeamRepo.findById).mockResolvedValue(
       new Team('team-ducati', 'Ducati Lenovo Team', 'Italy', 'Ducati', true, 'logo') 
@@ -83,7 +83,7 @@ describe('CreerContractUseCase', () => {
 
   it('lève une erreur si l\'équipe n\'existe pas', async () => {
     vi.mocked(mockRiderRepo.findById).mockResolvedValue(
-      new Rider('rider-44', 'Espargaró', 'Pol', 'ES',new Date('1991-06-10'), 'photo')
+      new Rider('rider-44', '44', 'Espargaró', 'Pol', 'ES',new Date('1991-06-10'), 'photo')
     );
     vi.mocked(mockTeamRepo.findById).mockResolvedValue(null);
 

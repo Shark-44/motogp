@@ -33,7 +33,7 @@ enum StatutResultat {
 }
 
 model Circuit {
-  id            String @id @default(uuid())
+  id            String      @id @default(uuid())
   nom           String
   pays          String
   longueurKm    Float
@@ -43,46 +43,47 @@ model Circuit {
 }
 
 model Rider {
-  id                String @id @default(uuid())
-  nom               String
-  prenom            String
-  pays              String
-  dateAnniversaire  DateTime
-  photo             String
-  contracts         Contract[]
+  id               String           @id @default(uuid())
+  fimNumber        String
+  nom              String
+  prenom           String
+  pays             String
+  dateAnniversaire DateTime
+  photo            String
+  contracts        Contract[]
   sessionResults   SessionResults[]
 }
 
 model Team {
-  id            String  @id @default(uuid())
+  id            String     @id @default(uuid())
   nom           String
   pays          String
   constructeur  String
-  estOfficielle Boolean @default(false)
+  estOfficielle Boolean    @default(false)
   logo          String
   contracts     Contract[]
 }
 
 model Contract {
-  id       String @id @default(uuid())
-  saison   Int
-  role     Role
+  id        String    @id @default(uuid())
+  saison    Int
+  role      Role
   dateDebut DateTime
   dateFin   DateTime?
-  rider    Rider  @relation(fields: [piloteId], references: [id])
-  piloteId String
-  team     Team   @relation(fields: [equipeId], references: [id])
-  equipeId String
+  rider     Rider     @relation(fields: [piloteId], references: [id])
+  piloteId  String
+  team      Team      @relation(fields: [equipeId], references: [id])
+  equipeId  String
 }
 
 model RaceEvent {
-  id        String   @id @default(uuid())
-  nom       String   
-  saison    Int      
-  date      DateTime
-  statut    StatutGP
-  circuit   Circuit  @relation(fields: [circuitId], references: [id])
-  circuitId String
+  id             String           @id @default(uuid())
+  nom            String
+  saison         Int
+  date           DateTime
+  statut         StatutGP
+  circuit        Circuit          @relation(fields: [circuitId], references: [id])
+  circuitId      String
   sessionResults SessionResults[]
 }
 

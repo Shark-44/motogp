@@ -1,11 +1,13 @@
 import type { SaisieSessionResultsPort, ResultatSaisi } from '../ports/in/saisie-sessionResults.port.js';
 import type { RaceEventRepositoryPort } from '../../../raceEvent/domaine/ports/out/raceEvent-repository.port.js';
+import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/rider-repository.port.js';
 import type { SessionResultsRepositoryPort } from '../../domaine/ports/out/sessionResults-repository.port.js';
 import { SessionResults } from '../../domaine/entities/sessionResults.entity.js';
 
 export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
   constructor(
     private readonly raceEventRepository: RaceEventRepositoryPort,
+    private readonly riderRepository: RiderRepositoryPort,
     private readonly sessionResultsRepository: SessionResultsRepositoryPort,
   ) {}
 
@@ -28,7 +30,7 @@ export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
           res.typeSession,
           res.statut,
           res.position,
-          res.piloteId,
+          res.fimNumber,
         ),
     );
 

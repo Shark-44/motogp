@@ -4,7 +4,7 @@ export interface ResultatSaisi {
   typeSession: TypeSession;
   statut: StatutResultat;
   position: number | null;
-  piloteId: string;
+  fimNumber: string;
 }
 
 export interface SaisieSessionResultsPort {

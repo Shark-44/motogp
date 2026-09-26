@@ -9,12 +9,12 @@ export class PrismaRiderRepository implements RiderRepositoryPort {
     const rows = await this.prisma.rider.findMany();
     return rows.map(
       (row) =>
-        new Rider(row.id, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo),
+        new Rider(row.id, row.fimNumber, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo),
     );
   }
   async findById(id: string): Promise<Rider | null> {
     const row = await this.prisma.rider.findUnique({ where: { id } });
     if (!row) return null;
-    return new Rider(row.id, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo);
+    return new Rider(row.id, row.fimNumber, row.nom, row.prenom, row.pays, row.dateAnniversaire, row.photo);
   }
 }

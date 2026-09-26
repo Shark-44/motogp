@@ -16,6 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `_prisma_migrations`
+--
+
+DROP TABLE IF EXISTS `_prisma_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `_prisma_migrations` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `checksum` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `finished_at` datetime(3) DEFAULT NULL,
+  `migration_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs` text COLLATE utf8mb4_unicode_ci,
+  `rolled_back_at` datetime(3) DEFAULT NULL,
+  `started_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `applied_steps_count` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `_prisma_migrations`
+--
+
+LOCK TABLES `_prisma_migrations` WRITE;
+/*!40000 ALTER TABLE `_prisma_migrations` DISABLE KEYS */;
+INSERT INTO `_prisma_migrations` VALUES ('5459944c-194a-467e-908b-d65f4a962bf6','e399612531d17ca3a789ea62b5de68c9642abb7e2956ee5babf6c7f8822cc0e6','2026-09-26 07:10:32.012','20260926071031_init_rider1',NULL,NULL,'2026-09-26 07:10:31.738',1);
+/*!40000 ALTER TABLE `_prisma_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `circuit`
 --
 
@@ -23,12 +53,12 @@ DROP TABLE IF EXISTS `circuit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `circuit` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pays` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pays` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `longueurKm` double NOT NULL,
   `nombreVirages` int NOT NULL,
-  `photo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -51,13 +81,13 @@ DROP TABLE IF EXISTS `contract`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contract` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `saison` int NOT NULL,
-  `role` enum('officiel','remplacant','wildcard') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `dateDebut` date DEFAULT NULL,
-  `dateFin` date DEFAULT NULL,
-  `piloteId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `equipeId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('officiel','remplacant','wildcard') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dateDebut` datetime(3) NOT NULL,
+  `dateFin` datetime(3) DEFAULT NULL,
+  `piloteId` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `equipeId` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Contract_piloteId_fkey` (`piloteId`),
   KEY `Contract_equipeId_fkey` (`equipeId`),
@@ -72,7 +102,7 @@ CREATE TABLE `contract` (
 
 LOCK TABLES `contract` WRITE;
 /*!40000 ALTER TABLE `contract` DISABLE KEYS */;
-INSERT INTO `contract` VALUES ('4254e941-ac01-4b75-b20d-8438bbc302a4',2026,'officiel','2026-01-01','2026-12-31','feb589f9-a83e-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498'),('447e1da1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58690-a83e-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498'),('447e9903-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb559c8-a83e-11f1-9a15-10e7c6aa2498','b65a6cbf-a9ce-11f1-9a15-10e7c6aa2498'),('447e9d17-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7490-a845-11f1-9a15-10e7c6aa2498','b65a6cbf-a9ce-11f1-9a15-10e7c6aa2498'),('447e9ed5-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58b9b-a83e-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ea03f-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58c03-a83e-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ea1d1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58ab7-a83e-11f1-9a15-10e7c6aa2498','b65a6e03-a9ce-11f1-9a15-10e7c6aa2498'),('447ea42c-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58d56-a83e-11f1-9a15-10e7c6aa2498','b65a6e03-a9ce-11f1-9a15-10e7c6aa2498'),('447ea653-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7669-a845-11f1-9a15-10e7c6aa2498','b65a5e75-a9ce-11f1-9a15-10e7c6aa2498'),('447ea7a2-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7380-a845-11f1-9a15-10e7c6aa2498','b65a5e75-a9ce-11f1-9a15-10e7c6aa2498'),('447ea8fb-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7089-a845-11f1-9a15-10e7c6aa2498','b65a6b4f-a9ce-11f1-9a15-10e7c6aa2498'),('447eaaf9-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','261fd77f-a8f6-11f1-9a15-10e7c6aa2498','b65a6b4f-a9ce-11f1-9a15-10e7c6aa2498'),('447eae58-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7156-a845-11f1-9a15-10e7c6aa2498','b65a6c0b-a9ce-11f1-9a15-10e7c6aa2498'),('447eafe1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d72e3-a845-11f1-9a15-10e7c6aa2498','b65a6c0b-a9ce-11f1-9a15-10e7c6aa2498'),('447eb154-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58c6b-a83e-11f1-9a15-10e7c6aa2498','b65a6d9f-a9ce-11f1-9a15-10e7c6aa2498'),('447eb2bb-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','feb58cea-a83e-11f1-9a15-10e7c6aa2498','b65a6d9f-a9ce-11f1-9a15-10e7c6aa2498'),('447eb447-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d73f2-a845-11f1-9a15-10e7c6aa2498','b65a6e9d-a9ce-11f1-9a15-10e7c6aa2498'),('447eb5ac-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d7579-a845-11f1-9a15-10e7c6aa2498','b65a6f13-a9ce-11f1-9a15-10e7c6aa2498'),('447eb70d-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-12-31','cf9d75fd-a845-11f1-9a15-10e7c6aa2498','b65a6f13-a9ce-11f1-9a15-10e7c6aa2498'),('447eb879-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01','2026-09-22','feb58b2c-a83e-11f1-9a15-10e7c6aa2498','b65a6f77-a9ce-11f1-9a15-10e7c6aa2498'),('447eb9d9-aee8-11f1-8bb0-10e7c6aa2498',2026,'wildcard','2026-01-01','2026-12-31','9e8a423c-a846-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ebb49-aee8-11f1-8bb0-10e7c6aa2498',2026,'wildcard','2026-01-01','2026-12-31','9e8b856f-a846-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498');
+INSERT INTO `contract` VALUES ('4254e941-ac01-4b75-b20d-8438bbc302a4',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb589f9-a83e-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498'),('447e1da1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58690-a83e-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498'),('447e9903-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb559c8-a83e-11f1-9a15-10e7c6aa2498','b65a6cbf-a9ce-11f1-9a15-10e7c6aa2498'),('447e9d17-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7490-a845-11f1-9a15-10e7c6aa2498','b65a6cbf-a9ce-11f1-9a15-10e7c6aa2498'),('447e9ed5-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58b9b-a83e-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ea03f-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58c03-a83e-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ea1d1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58ab7-a83e-11f1-9a15-10e7c6aa2498','b65a6e03-a9ce-11f1-9a15-10e7c6aa2498'),('447ea42c-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58d56-a83e-11f1-9a15-10e7c6aa2498','b65a6e03-a9ce-11f1-9a15-10e7c6aa2498'),('447ea653-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7669-a845-11f1-9a15-10e7c6aa2498','b65a5e75-a9ce-11f1-9a15-10e7c6aa2498'),('447ea7a2-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7380-a845-11f1-9a15-10e7c6aa2498','b65a5e75-a9ce-11f1-9a15-10e7c6aa2498'),('447ea8fb-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7089-a845-11f1-9a15-10e7c6aa2498','b65a6b4f-a9ce-11f1-9a15-10e7c6aa2498'),('447eaaf9-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','261fd77f-a8f6-11f1-9a15-10e7c6aa2498','b65a6b4f-a9ce-11f1-9a15-10e7c6aa2498'),('447eae58-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7156-a845-11f1-9a15-10e7c6aa2498','b65a6c0b-a9ce-11f1-9a15-10e7c6aa2498'),('447eafe1-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d72e3-a845-11f1-9a15-10e7c6aa2498','b65a6c0b-a9ce-11f1-9a15-10e7c6aa2498'),('447eb154-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58c6b-a83e-11f1-9a15-10e7c6aa2498','b65a6d9f-a9ce-11f1-9a15-10e7c6aa2498'),('447eb2bb-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','feb58cea-a83e-11f1-9a15-10e7c6aa2498','b65a6d9f-a9ce-11f1-9a15-10e7c6aa2498'),('447eb447-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d73f2-a845-11f1-9a15-10e7c6aa2498','b65a6e9d-a9ce-11f1-9a15-10e7c6aa2498'),('447eb5ac-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d7579-a845-11f1-9a15-10e7c6aa2498','b65a6f13-a9ce-11f1-9a15-10e7c6aa2498'),('447eb70d-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','cf9d75fd-a845-11f1-9a15-10e7c6aa2498','b65a6f13-a9ce-11f1-9a15-10e7c6aa2498'),('447eb879-aee8-11f1-8bb0-10e7c6aa2498',2026,'officiel','2026-01-01 00:00:00.000','2026-09-22 00:00:00.000','feb58b2c-a83e-11f1-9a15-10e7c6aa2498','b65a6f77-a9ce-11f1-9a15-10e7c6aa2498'),('447eb9d9-aee8-11f1-8bb0-10e7c6aa2498',2026,'wildcard','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','9e8a423c-a846-11f1-9a15-10e7c6aa2498','b65a6d31-a9ce-11f1-9a15-10e7c6aa2498'),('447ebb49-aee8-11f1-8bb0-10e7c6aa2498',2026,'wildcard','2026-01-01 00:00:00.000','2026-12-31 00:00:00.000','9e8b856f-a846-11f1-9a15-10e7c6aa2498','b65a3d79-a9ce-11f1-9a15-10e7c6aa2498');
 /*!40000 ALTER TABLE `contract` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,12 +114,12 @@ DROP TABLE IF EXISTS `raceevent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `raceevent` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `saison` int NOT NULL,
   `date` datetime(3) NOT NULL,
-  `statut` enum('PLANIFIE','TERMINE','ANNULE') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `circuitId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `statut` enum('PLANIFIE','TERMINE','ANNULE') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `circuitId` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `RaceEvent_circuitId_fkey` (`circuitId`),
   CONSTRAINT `RaceEvent_circuitId_fkey` FOREIGN KEY (`circuitId`) REFERENCES `circuit` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -114,13 +144,15 @@ DROP TABLE IF EXISTS `rider`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rider` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `prenom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pays` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prenom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pays` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `dateAnniversaire` datetime(3) NOT NULL,
-  `photo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `photo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fimNumber` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Rider_fimNumber_key` (`fimNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,7 +162,7 @@ CREATE TABLE `rider` (
 
 LOCK TABLES `rider` WRITE;
 /*!40000 ALTER TABLE `rider` DISABLE KEYS */;
-INSERT INTO `rider` VALUES ('261fd77f-a8f6-11f1-9a15-10e7c6aa2498','Ogura','Ai','Japon','2001-01-26 00:00:00.000','uploads/riders/Ai_Ogura.webp'),('7f152413-a900-11f1-9a15-10e7c6aa2498','Folger','Jonas','Allemagne','1993-08-13 00:00:00.000','uploads/riders/Jonas_Folger.webp'),('9e8a423c-a846-11f1-9a15-10e7c6aa2498','Pedrosa','Dani','Espagne','1985-09-29 00:00:00.000','uploads/riders/Dani_Pedrosa.webp'),('9e8b8422-a846-11f1-9a15-10e7c6aa2498','Espargaró','Pol','Espagne','1991-06-10 00:00:00.000','uploads/riders/Pol_Espargaró.webp'),('9e8b856f-a846-11f1-9a15-10e7c6aa2498','Pirro','Michele','Italie','1986-07-05 00:00:00.000','uploads/riders/Michele_Pirro.webp'),('9e8b85de-a846-11f1-9a15-10e7c6aa2498','Crutchlow','Cal','Royaume-Uni','1985-10-29 00:00:00.000','uploads/riders/Cal_Crutchlow.webp'),('9e8b868d-a846-11f1-9a15-10e7c6aa2498','Savadori','Lorenzo','Italie','1993-04-04 00:00:00.000','uploads/riders/Lorenzo_Savadori.webp'),('9e8b86ff-a846-11f1-9a15-10e7c6aa2498','Bradl','Stefan','Allemagne','1989-11-29 00:00:00.000','uploads/riders/Stefan_Bradl.webp'),('cf9d664a-a845-11f1-9a15-10e7c6aa2498','Espargaró','Aleix','Espagne','1989-07-30 00:00:00.000','uploads/riders/Aleix_Espargaró.webp'),('cf9d7089-a845-11f1-9a15-10e7c6aa2498','Marquez','Alex','Espagne','1996-04-23 00:00:00.000','uploads/riders/Alex_Marquez.webp'),('cf9d7156-a845-11f1-9a15-10e7c6aa2498','Di Giannantonio','Fabio','Italie','1998-10-10 00:00:00.000','uploads/riders/Fabio_Di_Giannantonio.webp'),('cf9d72e3-a845-11f1-9a15-10e7c6aa2498','Morbidelli','Franco','Italie','1994-12-04 00:00:00.000','uploads/riders/Franco_Morbidelli.webp'),('cf9d7380-a845-11f1-9a15-10e7c6aa2498','Oliveira','Miguel','Portugal','1995-01-04 00:00:00.000','uploads/riders/Miguel_Oliveira.webp'),('cf9d73f2-a845-11f1-9a15-10e7c6aa2498','Fernández','Raúl','Espagne','2000-10-23 00:00:00.000','uploads/riders/Raúl_Fernández.webp'),('cf9d7490-a845-11f1-9a15-10e7c6aa2498','Rins','Álex','Espagne','1995-12-08 00:00:00.000','uploads/riders/Álex_Rins.webp'),('cf9d7579-a845-11f1-9a15-10e7c6aa2498','Mir','Joan','Espagne','1997-09-01 00:00:00.000','uploads/riders/Joan_Mir.webp'),('cf9d75fd-a845-11f1-9a15-10e7c6aa2498','Marini','Luca','Italie','1997-08-10 00:00:00.000','uploads/riders/Luca_Marini.webp'),('cf9d7669-a845-11f1-9a15-10e7c6aa2498','Miller','Jack','Australie','1995-01-18 00:00:00.000','uploads/riders/Jack_Miller.webp'),('cf9d776d-a845-11f1-9a15-10e7c6aa2498','Fernández','Augusto','Espagne','1997-09-23 00:00:00.000','uploads/riders/Augusto_Fernández.webp'),('feb559c8-a83e-11f1-9a15-10e7c6aa2498','Quartararo','Fabio','France','1999-04-20 00:00:00.000','uploads/riders/Fabio_Quartararo.webp'),('feb58690-a83e-11f1-9a15-10e7c6aa2498','Bagnaia','Francesco','Italie','1997-01-14 00:00:00.000','uploads/riders/Francesco_Bagnaia.webp'),('feb589f9-a83e-11f1-9a15-10e7c6aa2498','Márquez','Marc','Espagne','1993-02-17 00:00:00.000','uploads/riders/Marc_Márquez.webp'),('feb58ab7-a83e-11f1-9a15-10e7c6aa2498','Martin','Jorge','Espagne','1998-01-29 00:00:00.000','uploads/riders/Jorge_Martin.webp'),('feb58b2c-a83e-11f1-9a15-10e7c6aa2498','Zarco','Johann','France','1990-07-16 00:00:00.000','uploads/riders/Johann_Zarco.webp'),('feb58b9b-a83e-11f1-9a15-10e7c6aa2498','Acosta','Pedro','Espagne','2004-05-25 00:00:00.000','uploads/riders/Pedro_Acosta.webp'),('feb58c03-a83e-11f1-9a15-10e7c6aa2498','Binder','Brad','Afrique du Sud','1995-08-11 00:00:00.000','uploads/riders/Brad_Binder.webp'),('feb58c6b-a83e-11f1-9a15-10e7c6aa2498','Vinales','Maverick','Espagne','1995-01-12 00:00:00.000','uploads/riders/Maverick_Vinales.webp'),('feb58cea-a83e-11f1-9a15-10e7c6aa2498','Bastianini','Enea','Italie','1997-12-30 00:00:00.000','uploads/riders/Enea_Bastianini.webp'),('feb58d56-a83e-11f1-9a15-10e7c6aa2498','Bezzecchi','Marco','Italie','1998-11-12 00:00:00.000','uploads/riders/Marco_Bezzecchi.webp');
+INSERT INTO `rider` VALUES ('261fd77f-a8f6-11f1-9a15-10e7c6aa2498','Ogura','Ai','Japon','2001-01-26 00:00:00.000','uploads/riders/Ai_Ogura.webp',NULL),('7f152413-a900-11f1-9a15-10e7c6aa2498','Folger','Jonas','Allemagne','1993-08-13 00:00:00.000','uploads/riders/Jonas_Folger.webp',NULL),('9e8a423c-a846-11f1-9a15-10e7c6aa2498','Pedrosa','Dani','Espagne','1985-09-29 00:00:00.000','uploads/riders/Dani_Pedrosa.webp',NULL),('9e8b8422-a846-11f1-9a15-10e7c6aa2498','Espargaró','Pol','Espagne','1991-06-10 00:00:00.000','uploads/riders/Pol_Espargaró.webp',NULL),('9e8b856f-a846-11f1-9a15-10e7c6aa2498','Pirro','Michele','Italie','1986-07-05 00:00:00.000','uploads/riders/Michele_Pirro.webp',NULL),('9e8b85de-a846-11f1-9a15-10e7c6aa2498','Crutchlow','Cal','Royaume-Uni','1985-10-29 00:00:00.000','uploads/riders/Cal_Crutchlow.webp',NULL),('9e8b868d-a846-11f1-9a15-10e7c6aa2498','Savadori','Lorenzo','Italie','1993-04-04 00:00:00.000','uploads/riders/Lorenzo_Savadori.webp',NULL),('9e8b86ff-a846-11f1-9a15-10e7c6aa2498','Bradl','Stefan','Allemagne','1989-11-29 00:00:00.000','uploads/riders/Stefan_Bradl.webp',NULL),('cf9d664a-a845-11f1-9a15-10e7c6aa2498','Espargaró','Aleix','Espagne','1989-07-30 00:00:00.000','uploads/riders/Aleix_Espargaró.webp',NULL),('cf9d7089-a845-11f1-9a15-10e7c6aa2498','Marquez','Alex','Espagne','1996-04-23 00:00:00.000','uploads/riders/Alex_Marquez.webp',NULL),('cf9d7156-a845-11f1-9a15-10e7c6aa2498','Di Giannantonio','Fabio','Italie','1998-10-10 00:00:00.000','uploads/riders/Fabio_Di_Giannantonio.webp',NULL),('cf9d72e3-a845-11f1-9a15-10e7c6aa2498','Morbidelli','Franco','Italie','1994-12-04 00:00:00.000','uploads/riders/Franco_Morbidelli.webp',NULL),('cf9d7380-a845-11f1-9a15-10e7c6aa2498','Oliveira','Miguel','Portugal','1995-01-04 00:00:00.000','uploads/riders/Miguel_Oliveira.webp',NULL),('cf9d73f2-a845-11f1-9a15-10e7c6aa2498','Fernández','Raúl','Espagne','2000-10-23 00:00:00.000','uploads/riders/Raúl_Fernández.webp',NULL),('cf9d7490-a845-11f1-9a15-10e7c6aa2498','Rins','Álex','Espagne','1995-12-08 00:00:00.000','uploads/riders/Álex_Rins.webp',NULL),('cf9d7579-a845-11f1-9a15-10e7c6aa2498','Mir','Joan','Espagne','1997-09-01 00:00:00.000','uploads/riders/Joan_Mir.webp',NULL),('cf9d75fd-a845-11f1-9a15-10e7c6aa2498','Marini','Luca','Italie','1997-08-10 00:00:00.000','uploads/riders/Luca_Marini.webp',NULL),('cf9d7669-a845-11f1-9a15-10e7c6aa2498','Miller','Jack','Australie','1995-01-18 00:00:00.000','uploads/riders/Jack_Miller.webp',NULL),('cf9d776d-a845-11f1-9a15-10e7c6aa2498','Fernández','Augusto','Espagne','1997-09-23 00:00:00.000','uploads/riders/Augusto_Fernández.webp',NULL),('feb559c8-a83e-11f1-9a15-10e7c6aa2498','Quartararo','Fabio','France','1999-04-20 00:00:00.000','uploads/riders/Fabio_Quartararo.webp',NULL),('feb58690-a83e-11f1-9a15-10e7c6aa2498','Bagnaia','Francesco','Italie','1997-01-14 00:00:00.000','uploads/riders/Francesco_Bagnaia.webp',NULL),('feb589f9-a83e-11f1-9a15-10e7c6aa2498','Márquez','Marc','Espagne','1993-02-17 00:00:00.000','uploads/riders/Marc_Márquez.webp',NULL),('feb58ab7-a83e-11f1-9a15-10e7c6aa2498','Martin','Jorge','Espagne','1998-01-29 00:00:00.000','uploads/riders/Jorge_Martin.webp',NULL),('feb58b2c-a83e-11f1-9a15-10e7c6aa2498','Zarco','Johann','France','1990-07-16 00:00:00.000','uploads/riders/Johann_Zarco.webp',NULL),('feb58b9b-a83e-11f1-9a15-10e7c6aa2498','Acosta','Pedro','Espagne','2004-05-25 00:00:00.000','uploads/riders/Pedro_Acosta.webp',NULL),('feb58c03-a83e-11f1-9a15-10e7c6aa2498','Binder','Brad','Afrique du Sud','1995-08-11 00:00:00.000','uploads/riders/Brad_Binder.webp',NULL),('feb58c6b-a83e-11f1-9a15-10e7c6aa2498','Vinales','Maverick','Espagne','1995-01-12 00:00:00.000','uploads/riders/Maverick_Vinales.webp',NULL),('feb58cea-a83e-11f1-9a15-10e7c6aa2498','Bastianini','Enea','Italie','1997-12-30 00:00:00.000','uploads/riders/Enea_Bastianini.webp',NULL),('feb58d56-a83e-11f1-9a15-10e7c6aa2498','Bezzecchi','Marco','Italie','1998-11-12 00:00:00.000','uploads/riders/Marco_Bezzecchi.webp',NULL);
 /*!40000 ALTER TABLE `rider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,18 +174,18 @@ DROP TABLE IF EXISTS `sessionresults`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessionresults` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `eventId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `typeSession` enum('FP1','FP2','FP3','Q1','Q2','PR','WUP','RAC') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `statut` enum('FINISHER','DNF','DNS','DSQ') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `eventId` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `typeSession` enum('SPRINT','RACE') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `statut` enum('TERMINE','ABANDON','NON_PARTANT') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `position` int DEFAULT NULL,
-  `piloteId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `piloteId` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `SessionResults_eventId_typeSession_piloteId_key` (`eventId`,`typeSession`,`piloteId`),
   UNIQUE KEY `SessionResults_eventId_typeSession_position_key` (`eventId`,`typeSession`,`position`),
   KEY `SessionResults_piloteId_fkey` (`piloteId`),
-  CONSTRAINT `SessionResults_eventId_fkey` FOREIGN KEY (`eventId`) REFERENCES `raceevent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `SessionResults_piloteId_fkey` FOREIGN KEY (`piloteId`) REFERENCES `rider` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `SessionResults_eventId_fkey` FOREIGN KEY (`eventId`) REFERENCES `raceevent` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `SessionResults_piloteId_fkey` FOREIGN KEY (`piloteId`) REFERENCES `rider` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -163,6 +195,7 @@ CREATE TABLE `sessionresults` (
 
 LOCK TABLES `sessionresults` WRITE;
 /*!40000 ALTER TABLE `sessionresults` DISABLE KEYS */;
+INSERT INTO `sessionresults` VALUES ('a7968b29-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',1,'feb58d56-a83e-11f1-9a15-10e7c6aa2498'),('a796aa7f-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',2,'feb58b9b-a83e-11f1-9a15-10e7c6aa2498'),('a796ad27-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',3,'cf9d73f2-a845-11f1-9a15-10e7c6aa2498'),('a796b028-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',4,'feb58ab7-a83e-11f1-9a15-10e7c6aa2498'),('a796b380-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',5,'261fd77f-a8f6-11f1-9a15-10e7c6aa2498'),('a796b598-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',6,'cf9d7156-a845-11f1-9a15-10e7c6aa2498'),('a796b7d4-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',7,'feb58c03-a83e-11f1-9a15-10e7c6aa2498'),('a796b9dd-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',8,'cf9d72e3-a845-11f1-9a15-10e7c6aa2498'),('a796bcdb-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',9,'feb58690-a83e-11f1-9a15-10e7c6aa2498'),('a796c03f-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',10,'cf9d75fd-a845-11f1-9a15-10e7c6aa2498'),('a796c2eb-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',11,'feb58b2c-a83e-11f1-9a15-10e7c6aa2498'),('a796c59c-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',12,'feb58cea-a83e-11f1-9a15-10e7c6aa2498'),('a796c7f4-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',14,'feb559c8-a83e-11f1-9a15-10e7c6aa2498'),('a796ca06-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',15,'cf9d7490-a845-11f1-9a15-10e7c6aa2498'),('a796cc33-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',16,'feb58c6b-a83e-11f1-9a15-10e7c6aa2498'),('a796cef3-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',18,'cf9d7669-a845-11f1-9a15-10e7c6aa2498'),('a796d0fc-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','TERMINE',19,'9e8b856f-a846-11f1-9a15-10e7c6aa2498'),('a796d309-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','ABANDON',NULL,'cf9d7579-a845-11f1-9a15-10e7c6aa2498'),('a796d51c-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','ABANDON',NULL,'cf9d7089-a845-11f1-9a15-10e7c6aa2498'),('a796d726-b766-11f1-ad73-10e7c6aa2498','89a1fe44-af38-11f1-8bb0-10e7c6aa2498','RACE','ABANDON',NULL,'feb589f9-a83e-11f1-9a15-10e7c6aa2498');
 /*!40000 ALTER TABLE `sessionresults` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,12 +207,12 @@ DROP TABLE IF EXISTS `team`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `team` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nom` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pays` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `constructeur` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pays` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `constructeur` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `estOfficielle` tinyint(1) NOT NULL DEFAULT '0',
-  `logo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -203,4 +236,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-09-23 17:30:00
+-- Dump completed on 2026-09-26  9:20:39
