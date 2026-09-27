@@ -38,7 +38,7 @@ describe('MajFinContractUseCase', () => {
   it('met à jour la date de fin lorsque le pilote et le contrat actif existent', async () => {
     // Garde-fou 1 : Le pilote existe
     vi.mocked(mockRiderRepo.findById).mockResolvedValue(
-      new Rider('rider-44', 'Espargaró', 'Pol', 'ES', new Date('1991-06-10'), 'photo')
+      new Rider('rider-44', '44', 'Espargaró', 'Pol', 'ES', new Date('1991-06-10'), 'photo')
     );
 
     // Garde-fou 2 : Le contrat actif existe
@@ -91,7 +91,7 @@ describe('MajFinContractUseCase', () => {
   it('lève une erreur si aucun contrat actif n\'est trouvé pour ce pilote', async () => {
     // Le pilote existe...
     vi.mocked(mockRiderRepo.findById).mockResolvedValue(
-      new Rider('rider-44', 'Espargaró', 'Pol', 'ES', new Date('1991-06-10'), 'photo')
+      new Rider('rider-44', '44', 'Espargaró', 'Pol', 'ES', new Date('1991-06-10'), 'photo')
     );
     // ...mais pas de contrat actif trouvé
     vi.mocked(mockContractRepo.findActiveContractForRider).mockResolvedValue(null);
