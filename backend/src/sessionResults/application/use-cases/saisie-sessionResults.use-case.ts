@@ -12,7 +12,7 @@ export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
   ) {}
 
   async execute(eventId: string, resultats: ResultatSaisi[]): Promise<SessionResults[]> {
-    //  Vérification de l'existence et du statut de l'événement
+    
     const evenement = await this.raceEventRepository.findById(eventId);
 
     if (!evenement) {
