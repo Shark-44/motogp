@@ -8,6 +8,7 @@ describe('ListerRidersUseCase', () => {
     const fakeRepository: RiderRepositoryPort = {
       findAll: async () => [new Rider('1','20', 'Quataro', 'Fabio', 'France',  new Date('2000-01-01'), 'photo')],
       findById: vi.fn(),
+      findByFimNumber: vi.fn(),
     };
 
     const useCase = new ListerRidersUseCase(fakeRepository);

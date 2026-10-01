@@ -62,4 +62,23 @@ export class PrismaContractRepository implements ContractRepositoryPort {
   
     return this.toEntity(row);
   }
+
+  async findActiveContractForRiderAtEvent(riderId: string, eventId: string): Promise<Contract | null> {
+    const event = await this.prisma.raceEvent.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) return null;
+
+    const prismaContract = await this.prisma.contract.findFirst({
+      where: {
+        piloteId: riderId,
+        dateDebut: { lte: event.date },
+        dateFin: { gte: event.date },
+      },
+    });
+
+    return prismaContract ? this.toEntity(prismaContract) : null;
+  }
 }
+  

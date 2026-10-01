@@ -17,6 +17,7 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
           row.statut,
           row.position,
           row.piloteId,
+          row.contratId,          
         ),
     );
   }
@@ -31,6 +32,7 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
             statut: res.statut,
             position: res.position,
             piloteId: res.piloteId,
+            contratId: res.contratId,            
           },
         })
       )

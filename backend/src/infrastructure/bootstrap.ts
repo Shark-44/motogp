@@ -70,7 +70,7 @@ const creerContract = new CreerContractUseCase(
 const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
 
 const listerSessionResults = new ListerSessionResultUseCase(sessionResultsRepository)
-const saisieSessionResults = new SaisieSessionResultsUseCase(raceEventRepository,riderRepository, sessionResultsRepository)
+const saisieSessionResults = new SaisieSessionResultsUseCase(raceEventRepository,riderRepository, sessionResultsRepository, contractRepository)
 
 const app = express();
 app.use(express.json()); 
