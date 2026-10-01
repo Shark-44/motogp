@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import type { SessionResults as PrismaSessionResults } from '@prisma/client';
 import { SessionResults } from '../../../domaine/entities/sessionResults.entity.js';
 import { SessionResultsRepositoryPort } from '../../../domaine/ports/out/sessionResults-repository.port.js';
 
@@ -6,20 +7,10 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
   constructor(private readonly prisma: PrismaClient) {}
 
   async findAll(): Promise<SessionResults[]> {
-    
     const rows = await this.prisma.sessionResults.findMany();
-    return rows.map(
-      (row) =>
-        new SessionResults(
-          row.id,
-          row.eventId,
-          row.typeSession,
-          row.statut,
-          row.position,
-          row.piloteId,
-        ),
-    );
+    return rows.map((row) => this.toEntity(row));
   }
+  
   async saveAll(results: SessionResults[]): Promise<SessionResults[]> {
     
     await this.prisma.$transaction(
@@ -36,5 +27,28 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
       )
     );
     return results;
+  }
+
+  async findByEventIds(eventIds: string[]): Promise<SessionResults[]> {
+    const rows = await this.prisma.sessionResults.findMany({
+      where: {
+        eventId: {
+          in: eventIds,
+        },
+      },
+    });
+
+    return rows.map((row) => this.toEntity(row));
+  }
+
+  private toEntity(row: PrismaSessionResults): SessionResults {
+    return new SessionResults(
+      row.id,
+      row.eventId,
+      row.typeSession,
+      row.statut,
+      row.position,
+      row.piloteId,
+    );
   }
 }

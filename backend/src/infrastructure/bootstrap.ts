@@ -33,6 +33,12 @@ import { ListerSessionResultUseCase } from '../sessionResults/application/use-ca
 import { sessionResultsRouter } from '../sessionResults/adapters/in/http/sessionResults.controller.js'
 import { SaisieSessionResultsUseCase } from '../sessionResults/application/use-cases/saisie-sessionResults.use-case.js';
 
+import { PrismaRiderStandingsRepository } from '../riderStandings/adapters/out/persistence/prisma-riderStandings.repository.js'
+import { CalculerRiderStandingsUseCase } from '../riderStandings/application/use-cases/calculer-riderStandings.use-case.js'
+import { riderStandingsRouter } from '../riderStandings/adapters/in/http/riderStandings.controller.js'
+import { ReglementPointMotoGP } from '../motogpScoringRules/domaine/services/reglementPointMotoGP.service.js'
+import { DepartageClassement } from '../riderStandings/domaine/services/departage-classement.service.js'
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -43,6 +49,7 @@ const teamRepository = new PrismaTeamRepository(prisma);
 const contractRepository = new PrismaContractRepository(prisma);
 const raceEventRepository = new PrismaRaceEventRepository(prisma);
 const sessionResultsRepository = new PrismaSessionResultsRepository(prisma);
+const riderStandingsRepository = new PrismaRiderStandingsRepository(prisma);
 
 const contractValidatorService = new ContractValidatorService(
   contractRepository,
@@ -53,8 +60,6 @@ const contractValidatorService = new ContractValidatorService(
 const listerCircuits = new ListerCircuitsUseCase(circuitRepository);
 const listerRiders = new ListerRidersUseCase(riderRepository);
 const listerTeams = new ListerTeamsUseCase(teamRepository);
-
-
 
 const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
 const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
@@ -69,8 +74,12 @@ const creerContract = new CreerContractUseCase(
 );
 const majFinContract = new MajFinContractUseCase(contractRepository, contractValidatorService, riderRepository);
 
-const listerSessionResults = new ListerSessionResultUseCase(sessionResultsRepository)
-const saisieSessionResults = new SaisieSessionResultsUseCase(raceEventRepository,riderRepository, sessionResultsRepository)
+const listerSessionResults = new ListerSessionResultUseCase(sessionResultsRepository);
+const saisieSessionResults = new SaisieSessionResultsUseCase(raceEventRepository,riderRepository, sessionResultsRepository);
+
+const reglementPoints = new ReglementPointMotoGP();
+const departage = new DepartageClassement();
+const calculerRiderStandings = new CalculerRiderStandingsUseCase(raceEventRepository, sessionResultsRepository, riderStandingsRepository, reglementPoints, departage);
 
 const app = express();
 app.use(express.json()); 
@@ -81,6 +90,7 @@ app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
 app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
 app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults));
+app.use('/api', riderStandingsRouter(calculerRiderStandings));
 
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 

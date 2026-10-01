@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ReglementPointMotoGP } from './reglementPointMotoGP.service.js';
-import { SessionResults } from '../sessionResults/domaine/entities/sessionResults.entity.js';
+import { SessionResults } from '../../../sessionResults/domaine/entities/sessionResults.entity.js';
 
 function creerResultat(
   id: string,

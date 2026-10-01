@@ -53,6 +53,7 @@ function creerRepositories(overrides?: {
   const sessionResultsRepository: SessionResultsRepositoryPort = {
     findAll: vi.fn(),
     saveAll: vi.fn(async (results) => results),
+    findByEventIds: vi.fn(),
   };
 
   return { raceEventRepository, riderRepository, sessionResultsRepository };

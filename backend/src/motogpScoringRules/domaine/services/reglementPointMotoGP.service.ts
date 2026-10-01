@@ -1,4 +1,4 @@
-import type { SessionResults } from '../sessionResults/domaine/entities/sessionResults.entity.js';
+import type { SessionResults } from '../../../sessionResults/domaine/entities/sessionResults.entity.js';
 
 export interface AttributionPoints {
   resultatId: string;

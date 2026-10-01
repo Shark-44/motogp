@@ -52,6 +52,7 @@ model Rider {
   photo            String
   contracts        Contract[]
   sessionResults   SessionResults[]
+  RiderStandings   RiderStandings[]
 }
 
 model Team {
@@ -85,6 +86,7 @@ model RaceEvent {
   circuit        Circuit          @relation(fields: [circuitId], references: [id])
   circuitId      String
   sessionResults SessionResults[]
+  RiderStandings RiderStandings[]
 }
 
 model SessionResults {
@@ -99,4 +101,16 @@ model SessionResults {
 
   @@unique([eventId, typeSession, piloteId])
   @@unique([eventId, typeSession, position])
+}
+
+model RiderStandings {
+  id          String         @id @default(uuid())
+  eventId     String
+  raceEvent   RaceEvent      @relation(fields: [eventId], references: [id])
+  piloteId    String
+  rider       Rider          @relation(fields: [piloteId], references: [id])
+  pointsCumules Int
+  positionGenerale Int
+  
+  @@unique([eventId, piloteId])
 }
