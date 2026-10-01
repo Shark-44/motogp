@@ -11,7 +11,9 @@ export class SessionResults {
     public readonly statut: StatutResultat,
     public readonly position: number | null,
     public readonly piloteId: string,
-  ) {
+    public readonly contratId: string,
+  )
+    {
     //regle ou methode dont l'execution ne depend pas d'une validation externe
 
     if (statut === 'TERMINE') {

@@ -23,11 +23,13 @@ describe('MajFinContractUseCase', () => {
         async (id: string, nouvelleDateFin: Date) =>
           new Contract(id, 2026, 'officiel' as RoleContract, new Date('2026-01-01'), nouvelleDateFin, 'rider-44', 'team-ducati')
       ),
+      findActiveContractForRiderAtEvent: vi.fn(),
     };
 
     mockRiderRepo = {
       findById: vi.fn(),
       findAll: vi.fn(),
+      findByFimNumber: vi.fn(),
     };
 
     mockContractValidator = {

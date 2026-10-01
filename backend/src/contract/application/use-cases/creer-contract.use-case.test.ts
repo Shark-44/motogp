@@ -26,11 +26,13 @@ describe('CreerContractUseCase', () => {
       findLastContractForRider: vi.fn(),
       findAllContractsForRider: vi.fn(),
       updateFinContrat: vi.fn(),
+      findActiveContractForRiderAtEvent: vi.fn(),
     };
 
     mockRiderRepo = {
       findById: vi.fn(),
       findAll: vi.fn(),
+      findByFimNumber: vi.fn(),
     };
 
     mockTeamRepo = {

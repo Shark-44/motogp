@@ -74,6 +74,7 @@ model Contract {
   piloteId  String
   team      Team      @relation(fields: [equipeId], references: [id])
   equipeId  String
+  sessionResults SessionResults[]
 }
 
 model RaceEvent {
@@ -96,6 +97,8 @@ model SessionResults {
   position    Int?
   rider       Rider          @relation(fields: [piloteId], references: [id])
   piloteId    String
+  contract    Contract       @relation(fields: [contratId], references: [id])
+  contratId   String
 
   @@unique([eventId, typeSession, piloteId])
   @@unique([eventId, typeSession, position])
