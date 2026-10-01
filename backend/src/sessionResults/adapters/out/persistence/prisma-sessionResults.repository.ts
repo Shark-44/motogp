@@ -8,7 +8,18 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
 
   async findAll(): Promise<SessionResults[]> {
     const rows = await this.prisma.sessionResults.findMany();
-    return rows.map((row) => this.toEntity(row));
+    return rows.map(
+      (row) =>
+        new SessionResults(
+          row.id,
+          row.eventId,
+          row.typeSession,
+          row.statut,
+          row.position,
+          row.piloteId,
+          row.contratId,          
+        ),
+    );
   }
   
   async saveAll(results: SessionResults[]): Promise<SessionResults[]> {
@@ -22,6 +33,7 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
             statut: res.statut,
             position: res.position,
             piloteId: res.piloteId,
+            contratId: res.contratId,            
           },
         })
       )
@@ -49,6 +61,7 @@ export class PrismaSessionResultsRepository implements SessionResultsRepositoryP
       row.statut,
       row.position,
       row.piloteId,
+      row.contratId,
     );
   }
 }

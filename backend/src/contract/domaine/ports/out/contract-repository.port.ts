@@ -8,4 +8,5 @@ export interface ContractRepositoryPort {
   findLastContractForRider(piloteId: string): Promise<Contract | null>;
   findAllContractsForRider(piloteId: string): Promise<Contract[]>;
   updateFinContrat(contractId: string, nouvelleDateFin: Date): Promise<Contract>;
+  findActiveContractForRiderAtEvent(piloteId: string, eventId: string): Promise<Contract | null>;
 }

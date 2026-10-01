@@ -6,7 +6,7 @@ import type { SessionResultsRepositoryPort } from '../../domaine/ports/out/sessi
 describe('ListerCircuitsUseCase', () => {
   it('retourne les circuits fournis par le port, sans base de données réelle', async () => {
     const fakeRepository: SessionResultsRepositoryPort = {
-      findAll: async () => [new SessionResults('1', 'Le Mans', 'RACE' , 'TERMINE', 1, '1')],
+      findAll: async () => [new SessionResults('1', 'Le Mans', 'RACE' , 'TERMINE', 1, '1', 'numero1')],
       saveAll: vi.fn(),
       findByEventIds: vi.fn(),
     };
