@@ -13,8 +13,8 @@ const ROUND_2 = new RaceEvent('event-2', 'GP Argentine', 2026, new Date('2026-03
 // incidence sur les tests qui ne portent pas sur le calcul des points.
 function sessionsCompletes(eventId: string, piloteId = 'rider-x'): SessionResults[] {
   return [
-    new SessionResults(`${eventId}-sprint`, eventId, 'SPRINT', 'TERMINE', 1, piloteId),
-    new SessionResults(`${eventId}-race`, eventId, 'RACE', 'TERMINE', 1, piloteId),
+    new SessionResults(`${eventId}-sprint`, eventId, 'SPRINT', 'TERMINE', 1, piloteId, 'contrat-1'),
+    new SessionResults(`${eventId}-race`, eventId, 'RACE', 'TERMINE', 1, piloteId, 'contrat-1'),
   ];
 }
 
@@ -105,7 +105,7 @@ describe('CalculerClassementPiloteUseCase', () => {
   it('refuse le calcul si un round a sa RACE mais pas son SPRINT', async () => {
     const resultats = [
       ...sessionsCompletes('event-1'),
-      new SessionResults('event-2-race', 'event-2', 'RACE', 'TERMINE', 1, 'rider-x'),
+      new SessionResults('event-2-race', 'event-2', 'RACE', 'TERMINE', 1, 'rider-x', 'contrat-1'),
       // pas de SPRINT pour event-2
     ];
     const repos = creerRepositories({ resultats });
@@ -121,7 +121,7 @@ describe('CalculerClassementPiloteUseCase', () => {
   it('refuse le calcul si un round a son SPRINT mais pas sa RACE', async () => {
     const resultats = [
       ...sessionsCompletes('event-1'),
-      new SessionResults('event-2-sprint', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-x'),
+      new SessionResults('event-2-sprint', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-x', 'contrat-1'),
       // pas de RACE pour event-2
     ];
     const repos = creerRepositories({ resultats });
@@ -164,11 +164,11 @@ describe('CalculerClassementPiloteUseCase', () => {
 
   it('cumule les points de deux rounds pour un même pilote', async () => {
     const resultats = [
-      new SessionResults('e1-sprint', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-1'), // 12
-      new SessionResults('e1-race', 'event-1', 'RACE', 'TERMINE', 1, 'rider-1'), // 25
-      new SessionResults('e2-sprint', 'event-2', 'SPRINT', 'TERMINE', 5, 'rider-1'), // 5
-      new SessionResults('e2-race', 'event-2', 'RACE', 'TERMINE', 2, 'rider-1'), // 20
-      new SessionResults('e2-race-r2', 'event-2', 'RACE', 'TERMINE', 1, 'rider-2'), // 25
+      new SessionResults('e1-sprint', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-1', 'contrat-1'), // 12
+      new SessionResults('e1-race', 'event-1', 'RACE', 'TERMINE', 1, 'rider-1', 'contrat-1'), // 25
+      new SessionResults('e2-sprint', 'event-2', 'SPRINT', 'TERMINE', 5, 'rider-1', 'contrat-1'), // 5
+      new SessionResults('e2-race', 'event-2', 'RACE', 'TERMINE', 2, 'rider-1', 'contrat-1'), // 20
+      new SessionResults('e2-race-r2', 'event-2', 'RACE', 'TERMINE', 1, 'rider-2', 'contrat-1'), // 25
     ];
     const repos = creerRepositories({ resultats });
     const useCase = new CalculerRiderStandingsUseCase(
@@ -187,10 +187,10 @@ describe('CalculerClassementPiloteUseCase', () => {
 
   it('classe les pilotes par points décroissants', async () => {
     const resultats = [
-      new SessionResults('r1', 'event-2', 'RACE', 'TERMINE', 1, 'rider-1'), // 25
-      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-2'), // 20
-      new SessionResults('r3', 'event-2', 'RACE', 'TERMINE', 3, 'rider-3'), // 16
-      new SessionResults('r4', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-1'), // session SPRINT présente pour satisfaire la garde
+      new SessionResults('r1', 'event-2', 'RACE', 'TERMINE', 1, 'rider-1', 'contrat-1'), // 25
+      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-2', 'contrat-1'), // 20
+      new SessionResults('r3', 'event-2', 'RACE', 'TERMINE', 3, 'rider-3', 'contrat-1'), // 16
+      new SessionResults('r4', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-1', 'contrat-1'), // session SPRINT présente pour satisfaire la garde
     ];
     const repos = creerRepositories({ events: [ROUND_2], resultats });
     const useCase = new CalculerRiderStandingsUseCase(
@@ -207,11 +207,11 @@ describe('CalculerClassementPiloteUseCase', () => {
 
   it('attribue le même rang à deux pilotes strictement ex-aequo (points et profil RACE identiques)', async () => {
     const resultats = [
-      new SessionResults('e1-sprint', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-1'),
-      new SessionResults('e1-race-1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-1'), // 25, 1 victoire
-      new SessionResults('e1-race-3', 'event-1', 'RACE', 'TERMINE', 2, 'rider-3'), // 20, 1x 2e place
-      new SessionResults('e2-sprint', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-1'),
-      new SessionResults('e2-race-2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-2'), // 20, 1x 2e place
+      new SessionResults('e1-sprint', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-1', 'contrat-1'),
+      new SessionResults('e1-race-1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-1', 'contrat-1'), // 25, 1 victoire
+      new SessionResults('e1-race-3', 'event-1', 'RACE', 'TERMINE', 2, 'rider-3', 'contrat-1'), // 20, 1x 2e place
+      new SessionResults('e2-sprint', 'event-2', 'SPRINT', 'TERMINE', 1, 'rider-1', 'contrat-1'),
+      new SessionResults('e2-race-2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-2', 'contrat-1'), // 20, 1x 2e place
     ];
     const repos = creerRepositories({ resultats });
     const useCase = new CalculerRiderStandingsUseCase(
@@ -232,9 +232,9 @@ describe('CalculerClassementPiloteUseCase', () => {
 
   it('départage deux pilotes à points égaux par leur nombre de victoires en RACE (pas en SPRINT)', async () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-2'), // 25, 1 victoire RACE
-      new SessionResults('r2', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-3'), // 12 (une victoire, mais en SPRINT : ignorée du départage)
-      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 4, 'rider-3'), // 13 -> total 25, 0 victoire RACE
+      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-2', 'contrat-1'), // 25, 1 victoire RACE
+      new SessionResults('r2', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-3', 'contrat-1'), // 12 (une victoire, mais en SPRINT : ignorée du départage)
+      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 4, 'rider-3', 'contrat-1'), // 13 -> total 25, 0 victoire RACE
     ];
     const repos = creerRepositories({
       events: [ROUND_1],

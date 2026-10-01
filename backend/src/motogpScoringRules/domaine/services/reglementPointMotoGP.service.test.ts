@@ -9,7 +9,7 @@ function creerResultat(
   position: number | null,
   piloteId = 'rider-1',
 ): SessionResults {
-  return new SessionResults(id, 'event-1', typeSession, statut, position, piloteId);
+  return new SessionResults(id, 'event-1', typeSession, statut, position, piloteId, 'contratId');
 }
 
 describe('ReglementPointMotoGP', () => {
@@ -68,7 +68,7 @@ describe('ReglementPointMotoGP', () => {
   });
 
   it("refuse de calculer les points d'un résultat non persisté (id manquant)", () => {
-    const resultat = new SessionResults(undefined, 'event-1', 'RACE', 'TERMINE', 1, 'rider-1');
+    const resultat = new SessionResults(undefined, 'event-1', 'RACE', 'TERMINE', 1, 'rider-1', 'contrat-1');
 
     expect(() => service.calculer([resultat])).toThrow('doit être persisté');
   });

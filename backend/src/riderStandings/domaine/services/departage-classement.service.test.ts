@@ -7,8 +7,8 @@ describe('DepartageClassement', () => {
 
   it('classe devant le pilote avec le plus de victoires en RACE', () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A'),
-      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-B'),
+      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A', 'contrat-1'),
+      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 2, 'rider-B', 'contrat-1'),
     ];
 
     expect(service.comparer('rider-A', 'rider-B', resultats)).toBeLessThan(0);
@@ -17,9 +17,9 @@ describe('DepartageClassement', () => {
 
   it('ignore les victoires en SPRINT pour le départage', () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-A'), // ignoré
-      new SessionResults('r2', 'event-1', 'RACE', 'TERMINE', 5, 'rider-A'),
-      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 2, 'rider-B'),
+      new SessionResults('r1', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-A', 'contrat-1'), // ignoré
+      new SessionResults('r2', 'event-1', 'RACE', 'TERMINE', 5, 'rider-A', 'contrat-1'),
+      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 2, 'rider-B', 'contrat-1'),
     ];
 
     // rider-A n'a aucune victoire en RACE malgré sa victoire au sprint ;
@@ -29,10 +29,10 @@ describe('DepartageClassement', () => {
 
   it('descend au 2e niveau si le nombre de victoires est identique', () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A'),
-      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 3, 'rider-A'), // A : 1 victoire, 0 deuxième, 1 troisième
-      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 1, 'rider-B'),
-      new SessionResults('r4', 'event-2', 'RACE', 'TERMINE', 2, 'rider-B'), // B : 1 victoire, 1 deuxième
+      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A', 'contrat-1'),
+      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 3, 'rider-A', 'contrat-1'), // A : 1 victoire, 0 deuxième, 1 troisième
+      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 1, 'rider-B', 'contrat-1'),
+      new SessionResults('r4', 'event-2', 'RACE', 'TERMINE', 2, 'rider-B', 'contrat-1'), // B : 1 victoire, 1 deuxième
     ];
 
     // Même nombre de victoires (1 chacun) ; B a une 2e place que A n'a pas -> B devant.
@@ -41,10 +41,10 @@ describe('DepartageClassement', () => {
 
   it('descend jusqu\'au niveau qui départage, quel que soit son rang', () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A'),
-      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 4, 'rider-A'),
-      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 1, 'rider-B'),
-      new SessionResults('r4', 'event-2', 'RACE', 'TERMINE', 5, 'rider-B'),
+      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 1, 'rider-A', 'contrat-1'),
+      new SessionResults('r2', 'event-2', 'RACE', 'TERMINE', 4, 'rider-A', 'contrat-1'),
+      new SessionResults('r3', 'event-1', 'RACE', 'TERMINE', 1, 'rider-B', 'contrat-1'),
+      new SessionResults('r4', 'event-2', 'RACE', 'TERMINE', 5, 'rider-B', 'contrat-1'),
     ];
 
     // Même nombre de 1res (1) ; aucune 2e ni 3e chez aucun des deux ;
@@ -54,15 +54,15 @@ describe('DepartageClassement', () => {
 
   it('renvoie 0 pour deux pilotes strictement à égalité à tous les niveaux', () => {
     const resultats = [
-      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 2, 'rider-A'),
-      new SessionResults('r2', 'event-1', 'RACE', 'TERMINE', 2, 'rider-B'),
+      new SessionResults('r1', 'event-1', 'RACE', 'TERMINE', 2, 'rider-A', 'contrat-1'),
+      new SessionResults('r2', 'event-1', 'RACE', 'TERMINE', 2, 'rider-B', 'contrat-1'),
     ];
 
     expect(service.comparer('rider-A', 'rider-B', resultats)).toBe(0);
   });
 
   it('renvoie 0 pour deux pilotes sans aucun résultat en RACE (0 point de comparaison)', () => {
-    const resultats = [new SessionResults('r1', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-A')];
+    const resultats = [new SessionResults('r1', 'event-1', 'SPRINT', 'TERMINE', 1, 'rider-A', 'contrat-1')];
 
     expect(service.comparer('rider-A', 'rider-B', resultats)).toBe(0);
   });
