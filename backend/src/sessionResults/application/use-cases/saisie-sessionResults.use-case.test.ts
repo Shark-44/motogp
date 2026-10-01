@@ -55,6 +55,7 @@ function creerRepositories(overrides?: {
   const sessionResultsRepository: SessionResultsRepositoryPort = {
     findAll: vi.fn(),
     saveAll: vi.fn(async (results) => results),
+    findByEventIds: vi.fn(),
   };
 
   const contractRepository: ContractRepositoryPort = {
@@ -68,6 +69,7 @@ function creerRepositories(overrides?: {
     findActiveContractForRiderAtEvent: vi.fn(async (piloteId: string) => 
       new Contract(`contract-${piloteId}`, 2026, 'officiel', new Date('2026-01-01'), new Date('2026-12-31'), piloteId, 'team-1')
     ),
+    findByIds: vi.fn(),
   };
 
   return { raceEventRepository, riderRepository, sessionResultsRepository, contractRepository };

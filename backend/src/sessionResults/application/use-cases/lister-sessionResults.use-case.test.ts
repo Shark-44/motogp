@@ -8,6 +8,7 @@ describe('ListerCircuitsUseCase', () => {
     const fakeRepository: SessionResultsRepositoryPort = {
       findAll: async () => [new SessionResults('1', 'Le Mans', 'RACE' , 'TERMINE', 1, '1', 'numero1')],
       saveAll: vi.fn(),
+      findByEventIds: vi.fn(),
     };
 
     const useCase = new ListerSessionResultUseCase(fakeRepository);

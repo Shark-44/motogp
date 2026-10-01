@@ -16,6 +16,7 @@ describe('ListerContractsUseCase', () => {
       findAllContractsForRider: vi.fn(),
       updateFinContrat: vi.fn(),
       findActiveContractForRiderAtEvent: vi.fn(),
+      findByIds: vi.fn(),
     };
 
     const useCase = new ListerContractsUseCase(fakeRepository);

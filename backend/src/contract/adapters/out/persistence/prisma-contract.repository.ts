@@ -80,5 +80,15 @@ export class PrismaContractRepository implements ContractRepositoryPort {
 
     return prismaContract ? this.toEntity(prismaContract) : null;
   }
+
+  async findByIds(ids: string[]): Promise<Contract[]> {
+    if (ids.length === 0) return [];
+    
+    const rows = await this.prisma.contract.findMany({
+      where: { id: { in: ids } },
+    });
+  
+    return rows.map((row) => this.toEntity(row));
+  }
 }
   

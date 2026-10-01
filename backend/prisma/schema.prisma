@@ -51,17 +51,19 @@ model Rider {
   dateAnniversaire DateTime
   photo            String
   contracts        Contract[]
-  sessionResults   SessionResults[]
+  SessionResults   SessionResults[]
+  riderStandings   RiderStandings[]
 }
 
 model Team {
-  id            String     @id @default(uuid())
+  id            String          @id @default(uuid())
   nom           String
   pays          String
   constructeur  String
-  estOfficielle Boolean    @default(false)
+  estOfficielle Boolean         @default(false)
   logo          String
   contracts     Contract[]
+  teamStandings TeamStandings[]
 }
 
 model Contract {
@@ -86,6 +88,8 @@ model RaceEvent {
   circuit        Circuit          @relation(fields: [circuitId], references: [id])
   circuitId      String
   sessionResults SessionResults[]
+  riderStandings RiderStandings[]
+  teamStandings  TeamStandings[]
 }
 
 model SessionResults {
@@ -102,4 +106,28 @@ model SessionResults {
 
   @@unique([eventId, typeSession, piloteId])
   @@unique([eventId, typeSession, position])
+}
+
+model RiderStandings {
+  id          String         @id @default(uuid())
+  eventId     String
+  raceEvent   RaceEvent      @relation(fields: [eventId], references: [id])
+  piloteId    String
+  rider       Rider          @relation(fields: [piloteId], references: [id])
+  pointsCumules Int
+  positionGenerale Int
+  
+  @@unique([eventId, piloteId])
+}
+
+model TeamStandings {
+  id          String         @id @default(uuid())
+  eventId     String
+  raceEvent   RaceEvent      @relation(fields: [eventId], references: [id])
+  equipeId    String
+  team        Team           @relation(fields: [equipeId], references: [id])
+  pointsCumules Int
+  positionGenerale Int
+  
+  @@unique([eventId, equipeId])
 }
