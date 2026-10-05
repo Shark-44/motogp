@@ -1,0 +1,72 @@
+{
+  "info": {
+    "_postman_id": "ea14f72a-c393-4918-807f-4844061f2a4e",
+    "name": "Motogp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28298693"
+  },
+  "item": [
+    {
+      "name": "teams",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response time is less than 500ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(500);\n});\n\npm.test(\"Response is an array\", function () {\n    pm.expect(pm.response.json()).to.be.an('array');\n});\n\npm.test(\"Response contains team objects with required fields\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.length).to.be.at.least(1);\n    pm.expect(jsonData[0]).to.have.property('id');\n    pm.expect(jsonData[0]).to.have.property('nom');\n    pm.expect(jsonData[0]).to.have.property('constructeur');\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/teams",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "teams"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "riders",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is a JSON array\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"array\");\n});\n\npm.test(\"Array is not empty\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.length.above(0);\n});\n\npm.test(\"Each rider object has the required fields\", function () {\n    const jsonData = pm.response.json();\n    const requiredFields = [\"id\", \"fimNumber\", \"nom\", \"prenom\", \"pays\", \"dateAnniversaire\", \"photo\"];\n    jsonData.forEach(function (rider) {\n        requiredFields.forEach(function (field) {\n            pm.expect(rider).to.have.property(field);\n        });\n    });\n});\n\npm.test(\"Response time is less than 1000ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(1000);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/riders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "riders"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

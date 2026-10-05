@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "ea14f72a-c393-4918-807f-4844061f2a4e",
+    "name": "Motogp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28298693"
+  },
+  "item": [
+    {
+      "name": "circuits",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is valid JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response is an array\", function () {\n    pm.expect(pm.response.json()).to.be.an('array');\n});\n\npm.test(\"Response contains circuit objects with required fields\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.length).to.be.above(0);\n    pm.expect(jsonData[0]).to.have.property('id');\n    pm.expect(jsonData[0]).to.have.property('nom');\n    pm.expect(jsonData[0]).to.have.property('pays');\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/circuits",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "circuits"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
