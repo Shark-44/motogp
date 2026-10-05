@@ -1,0 +1,346 @@
+{
+  "info": {
+    "_postman_id": "ea14f72a-c393-4918-807f-4844061f2a4e",
+    "name": "Motogp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28298693"
+  },
+  "item": [
+    {
+      "name": "raceEvents",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response is an array\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"array\");\n});\n\npm.test(\"Response array is not empty\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.length).to.be.greaterThan(0);\n});\n\npm.test(\"Each race event has required fields\", function () {\n    const jsonData = pm.response.json();\n    jsonData.forEach(function (event) {\n        pm.expect(event).to.have.property(\"id\");\n        pm.expect(event).to.have.property(\"nom\");\n        pm.expect(event).to.have.property(\"saison\");\n        pm.expect(event).to.have.property(\"date\");\n        pm.expect(event).to.have.property(\"statut\");\n        pm.expect(event).to.have.property(\"circuitId\");\n    });\n});\n\npm.test(\"Each race event statut is valid\", function () {\n    const jsonData = pm.response.json();\n    jsonData.forEach(function (event) {\n        pm.expect([\"TERMINE\", \"PLANIFIE\"]).to.include(event.statut);\n    });\n});\n\npm.test(\"Each race event saison is a number\", function () {\n    const jsonData = pm.response.json();\n    jsonData.forEach(function (event) {\n        pm.expect(event.saison).to.be.a(\"number\");\n    });\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-enregistrer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response has an id field (string, non-empty)\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n});\n\npm.test(\"Response nom equals the generated name\", function () {\n    const json = pm.response.json();\n    pm.expect(json.nom).to.eql(pm.collectionVariables.get(\"nomTest\"));\n});\n\npm.test(\"Response saison equals 2026\", function () {\n    const json = pm.response.json();\n    pm.expect(json.saison).to.eql(2026);\n});\n\npm.test(\"Response date equals the generated date\", function () {\n    const json = pm.response.json();\n    pm.expect(json.date).to.eql(pm.collectionVariables.get(\"dateTest\"));\n});\n\npm.test(\"Response statut equals 'PLANIFIE'\", function () {\n    const json = pm.response.json();\n    pm.expect(json.statut).to.eql(\"PLANIFIE\");\n});\n\npm.test(\"Response circuitId equals the generated circuitId\", function () {\n    const json = pm.response.json();\n    pm.expect(json.circuitId).to.eql(pm.collectionVariables.get(\"circuitId\"));\n});\n\npm.test(\"Save eventId to collection variable\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n    pm.collectionVariables.set(\"eventId\", json.id);\n});\n\npm.test(\"Response has an id field (string, non-empty)\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n    pm.collectionVariables.set(\"eventId\", json.id);\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"nomTest\", \"Test-\" + Date.now());\r\npm.collectionVariables.set(\"dateTest\", new Date(Date.now() + 86400000).toISOString());\r\npm.collectionVariables.set(\"circuitId\", \"9c9080a9-beff-11f1-9d56-10e7c6aa2498\");\r\npm.collectionVariables.set(\"datePassee\", new Date(Date.now() - 86400000).toISOString());"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{dateTest}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-enregistrer-pour-terminer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response has an id field (string, non-empty)\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n});\n\npm.test(\"Response nom equals the generated name\", function () {\n    const json = pm.response.json();\n    pm.expect(json.nom).to.eql(pm.collectionVariables.get(\"nomTestTermine\"));\n});\n\npm.test(\"Response saison equals 2026\", function () {\n    const json = pm.response.json();\n    pm.expect(json.saison).to.eql(2026);\n});\n\npm.test(\"Response date equals the generated date\", function () {\n    const json = pm.response.json();\n    pm.expect(json.date).to.eql(pm.collectionVariables.get(\"datePassee\"));\n});\n\npm.test(\"Response statut equals 'PLANIFIE'\", function () {\n    const json = pm.response.json();\n    pm.expect(json.statut).to.eql(\"PLANIFIE\");\n});\n\npm.test(\"Response circuitId equals the generated circuitId\", function () {\n    const json = pm.response.json();\n    pm.expect(json.circuitId).to.eql(pm.collectionVariables.get(\"circuitId\"));\n});\n\npm.test(\"Save eventId to collection variable\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n    pm.collectionVariables.set(\"eventIdTermine\", json.id);\n});\n\npm.test(\"Response has an id field (string, non-empty)\", function () {\n    const json = pm.response.json();\n    pm.expect(json.id).to.be.a(\"string\").and.to.not.be.empty;\n    pm.collectionVariables.set(\"eventId\", json.id);\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"nomTestTermine\", \"Test-Termine-\" + Date.now());\r\npm.collectionVariables.set(\"datePassee\", new Date(Date.now() - 86400000).toISOString());\r\npm.collectionVariables.set(\"circuitId\", \"9c9080a9-beff-11f1-9d56-10e7c6aa2498\");\r\npm.collectionVariables.set(\"datePassee\", new Date(Date.now() - 86400000).toISOString());"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nom\": \"{{nomTestTermine}}\",\r\n  \"saison\": 2026,\r\n  \"date\":  \"{{datePassee}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-enregistrer un event deja enregistré",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. On exige STRICTEMENT un code 400\npm.test(\"Statut HTTP est 400 Bad Request (Doublon refusé)\", function () {\n    pm.response.to.have.status(400);\n});\n\n// 2. On vérifie la présence du message d'erreur métier\npm.test(\"La réponse contient un message d'erreur\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"message\");\n    pm.expect(jsonData.message).to.be.a(\"string\").and.to.not.be.empty;\n});\n\n// 3. Temps de réponse\npm.test(\"Temps de réponse inférieur à 2000ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(2000);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{dateTest}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-maj en terminé",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();\n\n// 1. Sauvegarde dynamique de l'eventId généré pour le réutiliser dans le PUT\npm.collectionVariables.set(\"eventId\", json.id);\n\n// 2. Vérification que le circuitId retourné correspond à la variable\npm.test(\"Response circuitId equals the collection variable\", function () {\n    pm.expect(json.circuitId).to.eql(pm.collectionVariables.get(\"circuitId\"));\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{datePassee}}\",\r\n  \"statut\": \"TERMINE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents/{{eventIdTermine}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents",
+            "{{eventIdTermine}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-maj d'un event inconnu",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200 or 400', function () {\n    pm.expect(pm.response.code).to.be.oneOf([200, 400]);\n});\n\npm.test('Response body is JSON', function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200) {\n    pm.test('Response has expected fields', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.all.keys('id', 'nom', 'saison', 'date', 'statut', 'circuitId');\n    });\n\n    pm.test('Response id matches the requested id', function () {\n        const json = pm.response.json();\n        pm.expect(json.id).to.eql('f025c127-626a-4cae-9f86-8a749db0a000');\n    });\n\n    pm.test('statut is a non-empty string', function () {\n        const json = pm.response.json();\n        pm.expect(json.statut).to.be.a('string').and.not.empty;\n    });\n\n    pm.test('saison is a number', function () {\n        const json = pm.response.json();\n        pm.expect(json.saison).to.be.a('number');\n    });\n}\n\nif (pm.response.code === 400) {\n    pm.test('Error response has a message field', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.property('message');\n        pm.expect(json.message).to.be.a('string').and.not.empty;\n    });\n}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents/{{eventId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents",
+            "{{eventId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-maj d'un event a la date non passée",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200 or 400', function () {\n    pm.expect(pm.response.code).to.be.oneOf([200, 400]);\n});\n\npm.test('Response body is JSON', function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200) {\n    pm.test('Response has expected fields', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.all.keys('id', 'nom', 'saison', 'date', 'statut', 'circuitId');\n    });\n\n    pm.test('Response id matches the requested id', function () {\n        const json = pm.response.json();\n        pm.expect(json.id).to.eql('f025c127-626a-4cae-9f86-8a749db0afe6');\n    });\n\n    pm.test('statut is a non-empty string', function () {\n        const json = pm.response.json();\n        pm.expect(json.statut).to.be.a('string').and.not.empty;\n    });\n\n    pm.test('saison is a number', function () {\n        const json = pm.response.json();\n        pm.expect(json.saison).to.be.a('number');\n    });\n}\n\nif (pm.response.code === 400) {\n    pm.test('Error response has a message field', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.property('message');\n        pm.expect(json.message).to.be.a('string').and.not.empty;\n    });\n}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents/{{eventId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents",
+            "{{eventId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "raceEvents-maj d'un event deja effectué",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200 or 400', function () {\n    pm.expect(pm.response.code).to.be.oneOf([200, 400]);\n});\n\npm.test('Response body is JSON', function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200) {\n    pm.test('Response has expected fields', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.all.keys('id', 'nom', 'saison', 'date', 'statut', 'circuitId');\n    });\n\n    pm.test('Response id matches the requested id', function () {\n        const json = pm.response.json();\n        pm.expect(json.id).to.eql('f025c127-626a-4cae-9f86-8a749db0afe6');\n    });\n\n    pm.test('statut is a non-empty string', function () {\n        const json = pm.response.json();\n        pm.expect(json.statut).to.be.a('string').and.not.empty;\n    });\n\n    pm.test('saison is a number', function () {\n        const json = pm.response.json();\n        pm.expect(json.saison).to.be.a('number');\n    });\n}\n\nif (pm.response.code === 400) {\n    pm.test('Error response has a message field', function () {\n        const json = pm.response.json();\n        pm.expect(json).to.have.property('message');\n        pm.expect(json.message).to.be.a('string').and.not.empty;\n    });\n}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/raceEvents/{{eventIdTermine}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "raceEvents",
+            "{{eventIdTermine}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "nomTest",
+      "value": ""
+    },
+    {
+      "key": "dateTest",
+      "value": ""
+    },
+    {
+      "key": "eventId",
+      "value": ""
+    },
+    {
+      "key": "circuitId",
+      "value": ""
+    },
+    {
+      "key": "datePassee",
+      "value": ""
+    },
+    {
+      "key": "eventIdTermine",
+      "value": ""
+    },
+    {
+      "key": "nomTestTermine",
+      "value": ""
+    }
+  ]
+}

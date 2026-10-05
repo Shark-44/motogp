@@ -6,7 +6,7 @@ import type { MajRaceEventPort } from '../../../application/ports/in/maj-raceEve
 export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRaceEvent: CreerRaceEventPort, updateRaceEvent: MajRaceEventPort) {
   const router = Router();
 
-  router.get('/raceEvent', async (_req, res) => {
+  router.get('/raceEvents', async (_req, res) => {
     const raceEvents = await listerRaceEvents.execute();
     res.json(raceEvents);
   });
