@@ -45,13 +45,10 @@ export class PrismaRiderStandingsRepository implements RiderStandingsRepositoryP
     );
   }
 
-  async findByEventIds(eventIds: string[]): Promise<RiderStandings[]> {
+  async findByEventIds(): Promise<RiderStandings[]> {
     const rows = await this.prisma.riderStandings.findMany({
-      where: {
-        eventId: {
-          in: eventIds,
-        },
-      },
+      
+     
       orderBy: [
         { eventId: 'asc' },
         { positionGenerale: 'asc' },

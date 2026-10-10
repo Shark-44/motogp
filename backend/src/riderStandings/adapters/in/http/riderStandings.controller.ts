@@ -6,6 +6,7 @@ import { PrismaRaceEventRepository } from '../../../../raceEvent/adapters/out/pe
 import type { CalculerRiderStandingsPort } from '../../../application/ports/in/calculer-riderStandings.port.js';
 import { ListerRiderStandingsUseCase } from '../../../application/use-cases/lister-riderStandings.use-case.js';
 import { ListerDetailRiderStandingsUseCase } from '../../../application/use-cases/listerByEvent-riderStandings.use-case.js';
+import { PrismaCircuitRepository } from '../../../../circuits/adapters/out/persistence/prisma-circuit.repository.js';
 
 export function riderStandingsRouter(calculerRiderStandings: CalculerRiderStandingsPort) {
   const router = Router();
@@ -14,12 +15,13 @@ export function riderStandingsRouter(calculerRiderStandings: CalculerRiderStandi
   const riderStandingsRepository = new PrismaRiderStandingsRepository(prisma);
   const riderRepository = new PrismaRiderRepository(prisma);
   const raceEventRepository = new PrismaRaceEventRepository(prisma);
-
+  const circuitRepository = new PrismaCircuitRepository(prisma);
   
   const listerRiderStandingsUseCase = new ListerRiderStandingsUseCase(
     riderStandingsRepository,
     riderRepository,
-    raceEventRepository
+    raceEventRepository,
+    circuitRepository,
   );
 
   const listerDetailRiderStandingsUseCase = new ListerDetailRiderStandingsUseCase(
@@ -47,10 +49,10 @@ export function riderStandingsRouter(calculerRiderStandings: CalculerRiderStandi
 
   router.get('/riderStandings', async (req, res) => {
     try {
-      const eventIdsQuery = req.query.eventIds;
-      const eventIds = typeof eventIdsQuery === 'string' ? eventIdsQuery.split(',') : [];
+      //const eventIdsQuery = req.query.eventIds;
+      //const eventIds = typeof eventIdsQuery === 'string' ? eventIdsQuery.split(',') : [];
 
-      const riderStandings = await listerRiderStandingsUseCase.execute(eventIds);
+      const riderStandings = await listerRiderStandingsUseCase.execute();
       res.json(riderStandings);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });

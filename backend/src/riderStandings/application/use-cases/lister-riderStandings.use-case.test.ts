@@ -3,205 +3,161 @@ import { ListerRiderStandingsUseCase } from './lister-riderStandings.use-case.js
 import type { RiderStandingsRepositoryPort } from '../../domaine/ports/out/riderStandings-repository.port.js';
 import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/rider-repository.port.js';
 import type { RaceEventRepositoryPort } from '../../../raceEvent/domaine/ports/out/raceEvent-repository.port.js';
+import type { CircuitRepositoryPort } from '../../../circuits/domaine/ports/out/circuit-repository.port.js';
 
-// ---------------------------------------------------------------------------
-// Fixtures
-// Les champs non utilisés par le use case (positionGenerale, pointsCumules...)
-// sont là pour vérifier qu'ils sont bien conservés par le spread `...ligne`.
-// Ajuste-les si ton entité RiderStandings a des noms différents.
-// ---------------------------------------------------------------------------
-const EVENT_THAI = 'event-thailande';
-const EVENT_ARG = 'event-argentine';
+// --- Données de test ---------------------------------------------------------
 
-const evenements = [
-  {
-    id: EVENT_THAI,
+const circuit = {
+    id: 'circuit-1',
+    nom: 'Chang International Circuit',
+    pays: 'Thaïlande',
+};
+
+const evenement = {
+    id: 'event-1',
     nom: 'Grand Prix de Thaïlande',
-    date: new Date('2026-03-01'),
-    circuitId: 'circuit-buriram',
-  },
-  {
-    id: EVENT_ARG,
-    nom: "Grand Prix d'Argentine",
-    date: new Date('2026-03-15'),
-    circuitId: 'circuit-termas',
-  },
-  {
-    id: 'event-non-demande', // présent en base mais pas dans eventIds
-    nom: 'Grand Prix des Amériques',
-    date: new Date('2026-04-12'),
-    circuitId: 'circuit-cota',
-  },
-];
+    date: new Date('2026-03-01T15:00:00.000Z'),
+    circuitId: 'circuit-1',
+};
 
-const pilotes = [
-  { id: 'p1', nom: 'Bagnaia', prenom: 'Francesco' },
-  { id: 'p2', nom: 'Martin', prenom: 'Jorge' },
-  { id: 'p3', nom: 'Marquez', prenom: 'Marc' },
-  { id: 'p4', nom: 'Quartararo', prenom: 'Fabio' }, // présent en base mais pas au classement
-];
+const pilote = {
+    id: 'pilote-1',
+    nom: 'Bezzecchi',
+    prenom: 'Marco',
+};
 
-// Classement sur deux événements, trié par le repository (event puis position)
-const classement = [
-  { id: 'c1', piloteId: 'p2', eventId: EVENT_THAI, positionGenerale: 1, pointsCumules: 37 },
-  { id: 'c2', piloteId: 'p1', eventId: EVENT_THAI, positionGenerale: 2, pointsCumules: 29 },
-  { id: 'c3', piloteId: 'p1', eventId: EVENT_ARG, positionGenerale: 1, pointsCumules: 54 },
-  { id: 'c4', piloteId: 'p2', eventId: EVENT_ARG, positionGenerale: 2, pointsCumules: 50 },
-];
+const classement = {
+    eventId: 'event-1',
+    piloteId: 'pilote-1',
+    pointsCumules: 37,
+    positionGenerale: 1,
+};
 
-// ---------------------------------------------------------------------------
-// Mocks des ports (seules les méthodes utilisées par le use case sont mockées)
-// ---------------------------------------------------------------------------
-function creerMocks() {
-  const riderStandingsRepository = {
-    findByEventIds: vi.fn(),
-  };
-  const riderRepository = {
-    findAll: vi.fn(),
-    findById: vi.fn(), // sert à vérifier qu'on ne l'appelle PAS (pas de N+1)
-  };
-  const raceEventRepository = {
-    findAll: vi.fn(),
-    findById: vi.fn(), // idem
-  };
-
-  const useCase = new ListerRiderStandingsUseCase(
-    riderStandingsRepository as unknown as RiderStandingsRepositoryPort,
-    riderRepository as unknown as RiderRepositoryPort,
-    raceEventRepository as unknown as RaceEventRepositoryPort,
-  );
-
-  return { useCase, riderStandingsRepository, riderRepository, raceEventRepository };
-}
+// --- Mocks -------------------------------------------------------------------
 
 describe('ListerRiderStandingsUseCase', () => {
-  let mocks: ReturnType<typeof creerMocks>;
+    let riderStandingsRepository: { findAll: ReturnType<typeof vi.fn> };
+    let riderRepository: { findAll: ReturnType<typeof vi.fn> };
+    let raceEventRepository: { findAll: ReturnType<typeof vi.fn> };
+    let circuitRepository: { findAll: ReturnType<typeof vi.fn> };
+    let useCase: ListerRiderStandingsUseCase;
 
-  beforeEach(() => {
-    mocks = creerMocks();
-    mocks.riderStandingsRepository.findByEventIds.mockResolvedValue(classement);
-    mocks.riderRepository.findAll.mockResolvedValue(pilotes);
-    mocks.raceEventRepository.findAll.mockResolvedValue(evenements);
-  });
+    beforeEach(() => {
+        riderStandingsRepository = { findAll: vi.fn() };
+        riderRepository = { findAll: vi.fn() };
+        raceEventRepository = { findAll: vi.fn() };
+        circuitRepository = { findAll: vi.fn() };
 
-  it("enrichit chaque ligne avec le nom et le prénom du pilote", async () => {
-    const resultat = await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
+        useCase = new ListerRiderStandingsUseCase(
+            riderStandingsRepository as unknown as RiderStandingsRepositoryPort,
+            riderRepository as unknown as RiderRepositoryPort,
+            raceEventRepository as unknown as RaceEventRepositoryPort,
+            circuitRepository as unknown as CircuitRepositoryPort,
+        );
 
-    expect(resultat).toHaveLength(4);
-    expect(resultat[0]).toMatchObject({ piloteId: 'p2', nom: 'Martin', prenom: 'Jorge' });
-    expect(resultat[1]).toMatchObject({ piloteId: 'p1', nom: 'Bagnaia', prenom: 'Francesco' });
-    expect(resultat[2]).toMatchObject({ piloteId: 'p1', nom: 'Bagnaia', prenom: 'Francesco' });
-    expect(resultat[3]).toMatchObject({ piloteId: 'p2', nom: 'Martin', prenom: 'Jorge' });
-  });
-
-  it("associe à chaque ligne les détails de SON événement (plusieurs événements)", async () => {
-    const resultat = await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
-
-    expect(resultat[0]).toMatchObject({
-      eventId: EVENT_THAI,
-      nomEvent: 'Grand Prix de Thaïlande',
-      dateEvent: evenements[0].date,
-      circuitEvent: 'circuit-buriram',
+        riderRepository.findAll.mockResolvedValue([pilote]);
+        raceEventRepository.findAll.mockResolvedValue([evenement]);
+        circuitRepository.findAll.mockResolvedValue([circuit]);
     });
-    expect(resultat[2]).toMatchObject({
-      eventId: EVENT_ARG,
-      nomEvent: "Grand Prix d'Argentine",
-      dateEvent: evenements[1].date,
-      circuitEvent: 'circuit-termas',
+
+    it('retourne un tableau vide sans interroger les autres repositories quand il n\'y a aucun classement', async () => {
+        riderStandingsRepository.findAll.mockResolvedValue([]);
+
+        const resultat = await useCase.execute();
+
+        expect(resultat).toEqual([]);
+        expect(riderRepository.findAll).not.toHaveBeenCalled();
+        expect(raceEventRepository.findAll).not.toHaveBeenCalled();
+        expect(circuitRepository.findAll).not.toHaveBeenCalled();
     });
-  });
 
-  it("conserve les champs d'origine de la ligne de classement", async () => {
-    const resultat = await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
+    it('enrichit chaque ligne avec le pilote, l\'événement et le circuit', async () => {
+        riderStandingsRepository.findAll.mockResolvedValue([classement]);
 
-    expect(resultat[0]).toMatchObject({
-      id: 'c1',
-      eventId: EVENT_THAI,
-      positionGenerale: 1,
-      pointsCumules: 37,
+        const resultat = await useCase.execute();
+
+        expect(resultat).toHaveLength(1);
+        expect(resultat[0]).toMatchObject({
+            eventId: 'event-1',
+            piloteId: 'pilote-1',
+            pointsCumules: 37,
+            positionGenerale: 1,
+            nom: 'Bezzecchi',
+            prenom: 'Marco',
+            nomEvent: 'Grand Prix de Thaïlande',
+            dateEvent: new Date('2026-03-01T15:00:00.000Z'),
+            circuitEvent: 'circuit-1',
+            nomCircuit: 'Chang International Circuit',
+            paysCircuit: 'Thaïlande',
+        });
     });
-  });
 
-  it("conserve l'ordre renvoyé par le repository (le tri est la garantie du port)", async () => {
-    const resultat = await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
+    it('interroge chaque repository une seule fois, même avec plusieurs lignes', async () => {
+        riderStandingsRepository.findAll.mockResolvedValue([
+            classement,
+            { ...classement, piloteId: 'pilote-2', positionGenerale: 2, pointsCumules: 20 },
+        ]);
 
-    expect(resultat.map((l) => l.id)).toEqual(['c1', 'c2', 'c3', 'c4']);
-  });
+        await useCase.execute();
 
-  it("n'inclut ni les pilotes absents du classement ni les événements non demandés", async () => {
-    const resultat = await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
+        expect(riderStandingsRepository.findAll).toHaveBeenCalledTimes(1);
+        expect(riderRepository.findAll).toHaveBeenCalledTimes(1);
+        expect(raceEventRepository.findAll).toHaveBeenCalledTimes(1);
+        expect(circuitRepository.findAll).toHaveBeenCalledTimes(1);
+    });
 
-    expect(resultat.some((l) => l.piloteId === 'p4')).toBe(false);
-    expect(resultat).not.toContainEqual(
-      expect.objectContaining({ nomEvent: 'Grand Prix des Amériques' }),
-    );
-  });
+    it('conserve l\'ordre des lignes de classement', async () => {
+        const pilote2 = { id: 'pilote-2', nom: 'Acosta', prenom: 'Pedro' };
+        riderRepository.findAll.mockResolvedValue([pilote, pilote2]);
+        riderStandingsRepository.findAll.mockResolvedValue([
+            classement,
+            { ...classement, piloteId: 'pilote-2', positionGenerale: 2, pointsCumules: 20 },
+        ]);
 
-  it("renvoie un tableau vide si le classement est vide", async () => {
-    mocks.riderStandingsRepository.findByEventIds.mockResolvedValue([]);
+        const resultat = await useCase.execute();
 
-    const resultat = await mocks.useCase.execute([EVENT_THAI]);
+        expect(resultat.map((l) => l.piloteId)).toEqual(['pilote-1', 'pilote-2']);
+    });
 
-    expect(resultat).toEqual([]);
-  });
+    it('laisse nom et prénom à undefined quand le pilote est introuvable', async () => {
+        riderRepository.findAll.mockResolvedValue([]);
+        riderStandingsRepository.findAll.mockResolvedValue([classement]);
 
-  it("renvoie un tableau vide si aucun eventId n'est fourni", async () => {
-    mocks.riderStandingsRepository.findByEventIds.mockResolvedValue([]);
+        const resultat = await useCase.execute();
 
-    const resultat = await mocks.useCase.execute([]);
+        expect(resultat[0].nom).toBeUndefined();
+        expect(resultat[0].prenom).toBeUndefined();
+        expect(resultat[0].nomEvent).toBe('Grand Prix de Thaïlande');
+    });
 
-    expect(resultat).toEqual([]);
-    expect(mocks.riderStandingsRepository.findByEventIds).toHaveBeenCalledWith([]);
-  });
+    it('laisse les infos circuit à undefined quand le circuit est introuvable', async () => {
+        circuitRepository.findAll.mockResolvedValue([]);
+        riderStandingsRepository.findAll.mockResolvedValue([classement]);
 
-  it("laisse nom et prénom à undefined si le pilote est introuvable, sans planter", async () => {
-    mocks.riderStandingsRepository.findByEventIds.mockResolvedValue([
-      { id: 'c9', piloteId: 'pilote-inconnu', eventId: EVENT_THAI, positionGenerale: 1, pointsCumules: 25 },
-    ]);
+        const resultat = await useCase.execute();
 
-    const resultat = await mocks.useCase.execute([EVENT_THAI]);
+        expect(resultat[0].nomCircuit).toBeUndefined();
+        expect(resultat[0].paysCircuit).toBeUndefined();
+        expect(resultat[0].nomEvent).toBe('Grand Prix de Thaïlande');
+    });
 
-    expect(resultat).toHaveLength(1);
-    expect(resultat[0]).toMatchObject({ nomEvent: 'Grand Prix de Thaïlande' });
-    expect(resultat[0]).toHaveProperty('nom', undefined);
-    expect(resultat[0]).toHaveProperty('prenom', undefined);
-  });
+    it('laisse toutes les infos événement et circuit à undefined quand l\'événement est introuvable', async () => {
+        raceEventRepository.findAll.mockResolvedValue([]);
+        riderStandingsRepository.findAll.mockResolvedValue([classement]);
 
-  it("laisse les champs événement à undefined si l'événement est introuvable, sans lever d'erreur", async () => {
-    mocks.riderStandingsRepository.findByEventIds.mockResolvedValue([
-      { id: 'c9', piloteId: 'p1', eventId: 'event-fantome', positionGenerale: 1, pointsCumules: 25 },
-    ]);
+        const resultat = await useCase.execute();
 
-    const resultat = await mocks.useCase.execute(['event-fantome']);
+        expect(resultat[0].nomEvent).toBeUndefined();
+        expect(resultat[0].dateEvent).toBeUndefined();
+        expect(resultat[0].nomCircuit).toBeUndefined();
+        expect(resultat[0].paysCircuit).toBeUndefined();
+        expect(resultat[0].nom).toBe('Bezzecchi');
+    });
 
-    expect(resultat).toHaveLength(1);
-    expect(resultat[0]).toMatchObject({ nom: 'Bagnaia', prenom: 'Francesco' });
-    expect(resultat[0]).toHaveProperty('nomEvent', undefined);
-    expect(resultat[0]).toHaveProperty('dateEvent', undefined);
-    expect(resultat[0]).toHaveProperty('circuitEvent', undefined);
-  });
+    it('propage l\'erreur si un repository échoue', async () => {
+        riderStandingsRepository.findAll.mockResolvedValue([classement]);
+        circuitRepository.findAll.mockRejectedValue(new Error('Erreur base de données'));
 
-  it("transmet les eventIds tels quels au repository de classement", async () => {
-    const ids = [EVENT_THAI, EVENT_ARG];
-
-    await mocks.useCase.execute(ids);
-
-    expect(mocks.riderStandingsRepository.findByEventIds).toHaveBeenCalledTimes(1);
-    expect(mocks.riderStandingsRepository.findByEventIds).toHaveBeenCalledWith(ids);
-  });
-
-  it("charge pilotes et événements en un seul findAll chacun (pas de findById par ligne)", async () => {
-    await mocks.useCase.execute([EVENT_THAI, EVENT_ARG]);
-
-    expect(mocks.riderRepository.findAll).toHaveBeenCalledTimes(1);
-    expect(mocks.raceEventRepository.findAll).toHaveBeenCalledTimes(1);
-    expect(mocks.riderRepository.findById).not.toHaveBeenCalled();
-    expect(mocks.raceEventRepository.findById).not.toHaveBeenCalled();
-  });
-
-  it("propage l'erreur si le repository de classement échoue", async () => {
-    mocks.riderStandingsRepository.findByEventIds.mockRejectedValue(new Error('DB indisponible'));
-
-    await expect(mocks.useCase.execute([EVENT_THAI])).rejects.toThrow('DB indisponible');
-  });
+        await expect(useCase.execute()).rejects.toThrow('Erreur base de données');
+    });
 });
