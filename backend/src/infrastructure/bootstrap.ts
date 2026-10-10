@@ -39,6 +39,8 @@ import { DepartageClassement } from '../riderStandings/domaine/services/departag
 // Repositories & Use Cases Classements
 import { PrismaRiderStandingsRepository } from '../riderStandings/adapters/out/persistence/prisma-riderStandings.repository.js';
 import { CalculerRiderStandingsUseCase } from '../riderStandings/application/use-cases/calculer-riderStandings.use-case.js';
+import { riderStandingsRouter } from '../riderStandings/adapters/in/http/riderStandings.controller.js';
+
 
 import { PrismaTeamStandingsRepository } from '../teamStandings/adapters/out/persistence/prisma-teamStandings.repository.js';
 import { CalculerTeamStandingsUseCase } from '../teamStandings/application/use-cases/calculer-TeamStandings.use-case.js';
@@ -133,6 +135,7 @@ app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
 app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
 app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults));
+app.use('/api', riderStandingsRouter(calculerRiderStandings));
 
 // Nouvelle route orchestrée
 app.use('/api', standingsRouter(declencherServiceStandings));
