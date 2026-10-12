@@ -45,9 +45,12 @@ import { riderStandingsRouter } from '../riderStandings/adapters/in/http/riderSt
 import { PrismaTeamStandingsRepository } from '../teamStandings/adapters/out/persistence/prisma-teamStandings.repository.js';
 import { CalculerTeamStandingsUseCase } from '../teamStandings/application/use-cases/calculer-TeamStandings.use-case.js';
 
+import { teamStandingsRouter } from '../teamStandings/adapters/in/http/teamStandings.controller.js'
+
 // Orchestrateur & Routeur
 import { DeclencherServiseStandingsUseCase } from '../serviceStandings/application/use-cases/declencher-ServiceStandings.use-case.js';
 import { standingsRouter } from '../serviceStandings/adapters/in/http/serviceStandings.controller.js';
+import { ListerTeamStandingsUseCase } from '../teamStandings/application/use-cases/lister-teamStandings.use-case.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -118,6 +121,7 @@ const calculerTeamStandings = new CalculerTeamStandingsUseCase(
   reglementPoints,
   departage
 );
+const ListerTeamStandings = new ListerTeamStandingsUseCase(teamStandingsRepository, teamRepository, raceEventRepository)
 
 // Orchestrateur Global
 const declencherServiceStandings = new DeclencherServiseStandingsUseCase(
@@ -136,6 +140,7 @@ app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
 app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
 app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults));
 app.use('/api', riderStandingsRouter(calculerRiderStandings));
+app.use('/api', teamStandingsRouter(ListerTeamStandings));
 
 // Nouvelle route orchestrée
 app.use('/api', standingsRouter(declencherServiceStandings));
