@@ -14,20 +14,61 @@ aux statistiques) relèvent d'une sur-ingénierie assumée pour un site de cette
 taille — c'est un choix pédagogique documenté, pas une recommandation universelle.
 Voir [`docs/methodologie.md`](./docs/methodologie.md) pour le détail de cette posture.
 
+> **Projet d'étude, non livrable.** Il sert à démontrer ce que j'ai appris et
+> intégré, sous forme d'échantillons représentatifs. Ce qui est couvert, partiel
+> ou reporté est indiqué ci-dessous, sans l'enjoliver.
+
+## État d'avancement
+
+*Mis à jour le 14/10/2026.*
+
+| | Contenu |
+|---|---|
+| **Fait** | Domaine métier modélisé (diagrammes UML, ADR), backlog en user stories Gherkin, structure hexagonale en place |
+| | Backend : use cases de classement (pilotes et équipes : lecture, calcul avec départage), module d'authentification par jeton |
+| | Tests unitaires (Vitest) sur les use cases et sur chaque couche du module `auth` |
+| **En cours** | Pose du middleware admin sur les routes de commande · mise à jour de la collection Postman · front (React) |
+| **Partiel** | Tests d'intégration : échantillon dans une collection Postman, volontairement incomplet |
+| **Reporté** | Section statistiques (read models) · limite de tentatives sur la connexion · CI et déploiement · régénération des données de test (positions incohérentes sur certains Grands Prix) |
+
+Le [journal d'évolution](./docs/backend/architecture.md#journal-dévolution) garde
+le suivi daté des décisions.
+
 ## Stack
 
 - **Frontend** : React + TypeScript, Vite, shadcn/ui pour les graphiques et
-  tableaux de statistiques
+  tableaux de statistiques *(en cours)*
 - **Backend** : Node.js + TypeScript, architecture hexagonale
-- **Persistance** : MySQL, via ORM (choix documenté dans `docs/adr/`)
+- **Persistance** : MySQL, via Prisma (choix documenté dans `docs/adr/`)
+- **Tests** : Vitest (unitaires), Postman (intégration, échantillon)
 - **Monorepo** : npm workspaces
+
+## Démarrage rapide
+
+```bash
+npm install
+cp backend/.env.example backend/.env   # puis renseigner les valeurs (jamais commité)
+# commande de lancement du backend : à compléter
+```
+
+Variables d'environnement du module d'authentification : `ADMIN_PASSWORD`,
+`JWT_SECRET` (32 caractères minimum), `JWT_DUREE_SECONDES` (optionnelle).
+
+## Tests
+
+```bash
+npx vitest run          # toute la suite
+npx vitest run auth     # le module d'authentification seul
+```
 
 ## Structure du dépôt
 
 ```
 motogp-hexagonal/
 ├── docs/
-│   ├── backend/architecture.md      # détail des couches hexagonales
+│   ├── backend/
+│   │   ├── architecture.md          # détail des couches hexagonales
+│   │   └── feature_auth.md          # module d'authentification (choix, flux JWT, limites)
 │   ├── frontend/architecture.md     # organisation React (à venir)
 │   ├── adr/                         # décisions d'architecture documentées
 │   │   ├── ADR-modelisation-domaine-motogp.md
@@ -49,6 +90,9 @@ motogp-hexagonal/
 
 - [Architecture backend](./docs/backend/architecture.md) — structure hexagonale,
   règle de dépendance, ce qui est décidé et ce qui ne l'est pas encore
+- [Module d'authentification](./docs/backend/feature_auth.md) — séparation
+  lecture publique / gestion admin, flux du jeton, choix de sécurité, limites
+  assumées, évolution prévue
 - [Backlog / user stories](./docs/user-stories/backlog.md) — epics et stories au
   format Gherkin, annotées par couche architecturale
 - [ADR](./docs/adr/) — journal des décisions structurantes, avec les diagrammes
@@ -69,16 +113,9 @@ motogp-hexagonal/
    composition), réutilisables sur n'importe quel autre bloc du domaine
 5. `docs/user-stories/backlog.md` — la traduction en stories développables
 
-## État d'avancement
+## Suivi de projet
 
-Le projet est actuellement en phase de cadrage : domaine métier modélisé,
-backlog rédigé, structure de dossiers posée. Le code n'a pas encore démarré —
-voir le [journal d'évolution](./docs/backend/architecture.md#journal-dévolution)
-pour le suivi daté des décisions.
-
-## Trello
-
-https://trello.com/invite/b/6a70fe862e299d53f2c26340/ATTI5360576bb7016ae1ee7118735e2b3c0eF0ACAFFF/motogp-etude-hexagonale
+Tableau Trello : https://trello.com/b/bJRz1QfH/motogp-etude-hexagonale
 
 ## Auteur
 
