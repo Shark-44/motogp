@@ -115,9 +115,7 @@ motogp-hexagonal/
 
 ## Suivi de projet
 
-<!-- Lien d'invitation Trello retiré : un lien /invite/ permet en général à toute
-     personne qui le possède de rejoindre le board. Le remplacer par un board
-     public en lecture seule, ou par une capture d'écran du tableau. -->
+Tableau Trello : https://trello.com/b/bJRz1QfH/motogp-etude-hexagonale
 
 ## Auteur
 
