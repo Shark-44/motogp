@@ -3,6 +3,37 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { prisma } from './prisma-client.js';
 
+//admin middleware
+import { routerAdmin } from '../auth/adapters/in/http/auth.routes.js'
+import { AuthController } from '../auth/adapters/in/http/auth.controller.js';
+import { exigerAdmin } from '../auth/adapters/in/http/exiger-admin.middleware.js';
+import { ConnecterAdminUseCase } from '../auth/application/use-cases/connecter-admin.use-case.js';
+import { VerifierJetonUseCase } from '../auth/application/use-cases/verifier-jeton.use-case.js';
+import { JwtJetonService } from '../auth/adapters/out/jwt/jwt-jeton.service.js';
+import { VerifierAdminUseCase } from '../auth/application/use-cases/verifier-admin.use-case.js';
+
+const motDePasseAdmin = process.env.ADMIN_PASSWORD;
+if (!motDePasseAdmin) {
+  throw new Error('ADMIN_PASSWORD manquant : renseigne-le dans le fichier .env');
+}
+
+const secretJwt = process.env.JWT_SECRET;
+if (!secretJwt) {
+  throw new Error('JWT_SECRET manquant : renseigne-le dans le fichier .env');
+}
+
+const dureeSecondes = Number(process.env.JWT_DUREE_SECONDES ?? 3600);
+
+const verifierAdmin = new VerifierAdminUseCase(motDePasseAdmin);
+const jetonService = new JwtJetonService(secretJwt, dureeSecondes);
+const connecterAdmin = new ConnecterAdminUseCase(verifierAdmin, jetonService);
+const verifierJeton = new VerifierJetonUseCase(jetonService);
+
+const authController = new AuthController(connecterAdmin);
+const exigerAdminMw = exigerAdmin(verifierJeton);
+
+// le domaine
+
 import { PrismaCircuitRepository } from '../circuits/adapters/out/persistence/prisma-circuit.repository.js';
 import { ListerCircuitsUseCase } from '../circuits/application/use-cases/lister-circuits.use-case.js';
 import { circuitRouter } from '../circuits/adapters/in/http/circuit.controller.js';
@@ -132,6 +163,8 @@ const declencherServiceStandings = new DeclencherServiseStandingsUseCase(
 // --- Application Express ---
 const app = express();
 app.use(express.json());
+
+app.use('/auth', routerAdmin(authController, exigerAdminMw));
 
 app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
