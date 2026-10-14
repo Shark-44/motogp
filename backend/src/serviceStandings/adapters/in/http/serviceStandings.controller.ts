@@ -1,10 +1,12 @@
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 import type { ServiceStandingsPort } from '../../../../serviceStandings/application/ports/in/serviceStandings.port.js';
+import { exigerAdmin } from  '../../../../auth/adapters/in/http/exiger-admin.middleware.js'
+
 
 export function standingsRouter(serviceStandings: ServiceStandingsPort) {
   const router = Router();
 
-  router.post('/standings/recalculate/:eventId', async (req, res) => {
+  router.post('/standings/recalculate/:eventId',  exigerAdmin, async (req: Request, res: Response) => {
     try {
       const { eventId } = req.params;
       await serviceStandings.execute(eventId);

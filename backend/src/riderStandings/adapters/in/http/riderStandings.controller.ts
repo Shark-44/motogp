@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { PrismaRiderStandingsRepository } from '../../out/persistence/prisma-riderStandings.repository.js';
 import { PrismaRiderRepository } from '../../../../riders/adapters/out/persistence/prisma-rider.repository.js';
@@ -7,6 +7,8 @@ import type { CalculerRiderStandingsPort } from '../../../application/ports/in/c
 import { ListerRiderStandingsUseCase } from '../../../application/use-cases/lister-riderStandings.use-case.js';
 import { ListerDetailRiderStandingsUseCase } from '../../../application/use-cases/listerByEvent-riderStandings.use-case.js';
 import { PrismaCircuitRepository } from '../../../../circuits/adapters/out/persistence/prisma-circuit.repository.js';
+import { exigerAdmin } from  '../../../../auth/adapters/in/http/exiger-admin.middleware.js'
+
 
 export function riderStandingsRouter(calculerRiderStandings: CalculerRiderStandingsPort) {
   const router = Router();
@@ -31,7 +33,7 @@ export function riderStandingsRouter(calculerRiderStandings: CalculerRiderStandi
   );
 
 
-  router.post('/riderStandings/:eventId', async (req, res) => {
+  router.post('/riderStandings/:eventId', exigerAdmin, async (req: Request, res: Response) => {
     try {
       const { eventId } = req.params;
       await calculerRiderStandings.execute(eventId);

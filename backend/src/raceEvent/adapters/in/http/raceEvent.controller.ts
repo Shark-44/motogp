@@ -1,7 +1,8 @@
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 import type { ListerRaceEventsPort } from '../../../application/ports/in/lister-raceEvents.port.js';
 import type { CreerRaceEventPort } from '../../../application/ports/in/creer-raceEvents.port.js'
 import type { MajRaceEventPort } from '../../../application/ports/in/maj-raceEvents.port.js'
+import { exigerAdmin } from  '../../../../auth/adapters/in/http/exiger-admin.middleware.js'
 
 export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRaceEvent: CreerRaceEventPort, updateRaceEvent: MajRaceEventPort) {
   const router = Router();
@@ -11,7 +12,7 @@ export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRac
     res.json(raceEvents);
   });
 
-  router.post('/raceEvents', async (req, res) => {
+  router.post('/raceEvents', exigerAdmin, async (req: Request, res: Response) => {
     try {
       const { nom, saison, date, statut, circuitId } = req.body;
       const raceEvent = await creerRaceEvent.execute(nom, saison, new Date(date), statut, circuitId);
@@ -21,7 +22,7 @@ export function raceEventRouter(listerRaceEvents: ListerRaceEventsPort, creerRac
     }
   });
 
-  router.put('/raceEvents/:id', async (req, res) => {
+  router.put('/raceEvents/:id', exigerAdmin, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const { statut } = req.body;
