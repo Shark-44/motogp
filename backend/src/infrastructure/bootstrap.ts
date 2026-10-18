@@ -169,14 +169,14 @@ app.use('/auth', routerAdmin(authController, exigerAdminMw));
 app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
-app.use('/api', contractRouter(listerContracts, creerContract, majFinContract));
-app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents));
-app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults));
-app.use('/api', riderStandingsRouter(calculerRiderStandings));
+app.use('/api', contractRouter(listerContracts, creerContract, majFinContract, exigerAdminMw));
+app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents, exigerAdminMw));
+app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults, exigerAdminMw));
+app.use('/api', riderStandingsRouter(calculerRiderStandings, exigerAdminMw));
 app.use('/api', teamStandingsRouter(ListerTeamStandings));
 
 // Nouvelle route orchestrée
-app.use('/api', standingsRouter(declencherServiceStandings));
+app.use('/api', standingsRouter(declencherServiceStandings, exigerAdminMw));
 
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 

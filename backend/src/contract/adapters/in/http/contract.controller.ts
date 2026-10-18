@@ -1,11 +1,9 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type Response, type RequestHandler } from 'express';
 import type { ListerContractsPort } from '../../../application/ports/in/lister-contracts.port.js';
 import type { CreerContractPort} from '../../../application/ports/in/creer-contract.port.js'
 import type { MajFinContractPort } from '../../../application/ports/in/maj.fin-contract.port.js';
-import { exigerAdmin } from  '../../../../auth/adapters/in/http/exiger-admin.middleware.js'
 
-
-export function contractRouter(listerContracts: ListerContractsPort, creerContract: CreerContractPort, majFinContract: MajFinContractPort) {
+export function contractRouter(listerContracts: ListerContractsPort, creerContract: CreerContractPort, majFinContract: MajFinContractPort, exigerAdminMw: RequestHandler) {
   const router = Router();
 
   router.get('/contracts', async (_req, res) => {
@@ -13,7 +11,7 @@ export function contractRouter(listerContracts: ListerContractsPort, creerContra
     res.json(contracts);
   });
 
-  router.post('/contracts', exigerAdmin, async (req: Request, res: Response) => {
+  router.post('/contracts', exigerAdminMw, async (req: Request, res: Response) => {
     try {
       const { piloteId, equipeId, saison, role, dateDebut, dateFin } = req.body;
       const contract = await creerContract.execute(piloteId, equipeId, saison, role, dateDebut, dateFin);
@@ -23,7 +21,7 @@ export function contractRouter(listerContracts: ListerContractsPort, creerContra
     }
   });
 
-  router.patch('/contracts/:piloteId', exigerAdmin, async (req: Request, res: Response) => {
+  router.patch('/contracts/:piloteId', exigerAdminMw, async (req: Request, res: Response) => {
     try {
       const { piloteId } = req.params;
       const { dateDebut, dateFin, nouvelleDateFin } = req.body;

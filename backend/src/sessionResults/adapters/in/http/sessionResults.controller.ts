@@ -1,12 +1,12 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type Response, type RequestHandler } from 'express';
 import type { ListerSessionResultsPort } from '../../../application/ports/in/lister-sessionResults.port.js';
 import type { SaisieSessionResultsPort } from '../../../application/ports/in/saisie-sessionResults.port.js';
-import { exigerAdmin } from  '../../../../auth/adapters/in/http/exiger-admin.middleware.js'
 
 
 export function sessionResultsRouter(
   listerSessionResults: ListerSessionResultsPort,
-  saisieSessionResults: SaisieSessionResultsPort
+  saisieSessionResults: SaisieSessionResultsPort,
+  exigerAdminMw: RequestHandler
 ) {
   const router = Router();
 
@@ -17,7 +17,7 @@ export function sessionResultsRouter(
   });
 
   
-  router.post('/sessionResults/:eventId', exigerAdmin, async (req: Request, res: Response) => {
+  router.post('/sessionResults/:eventId', exigerAdminMw, async (req: Request, res: Response) => {
     try {
       const { eventId } = req.params;
       const resultatsSaisis = req.body; 
