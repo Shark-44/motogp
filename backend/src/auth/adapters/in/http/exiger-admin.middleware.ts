@@ -18,6 +18,7 @@ function extraireJeton(entete: string | undefined): string | null {
  * Usage : router.post('/ma-route', exigerAdmin(verifierJeton), controller.methode)
  */
 export const exigerAdmin =
+
   (verifierJeton: VerifierJetonPort): RequestHandler =>
   async (req, res, next) => {
     try {
