@@ -1,11 +1,51 @@
 {
   "info": {
-    "_postman_id": "ea14f72a-c393-4918-807f-4844061f2a4e",
+    "_postman_id": "6cf1de93-949f-40d4-8390-f3f3a8476f3d",
     "name": "Motogp",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "28298693"
   },
   "item": [
+    {
+      "name": "login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\n// Déclaration unique et propre de jsonData ici\nconst jsonData = pm.response.json();\n\npm.test(\"Response contains jeton (JWT token)\", function () {\n    pm.expect(jsonData).to.have.property(\"jeton\");\n    pm.expect(jsonData.jeton).to.be.a(\"string\").and.not.empty;\n    // On stocke directement le token au format Bearer pour les requêtes suivantes\n    pm.collectionVariables.set(\"monTokenBearer\", \"Bearer \" + jsonData.jeton);\n});\n\npm.test(\"Response contains expireDansSecondes\", function () {\n    pm.expect(jsonData).to.have.property(\"expireDansSecondes\");\n    pm.expect(jsonData.expireDansSecondes).to.be.a(\"number\");\n});\n\npm.test(\"Response contains role\", function () {\n    pm.expect(jsonData).to.have.property(\"role\");\n    pm.expect(jsonData.role).to.eql(\"admin\");\n});\n\npm.test(\"Response time is less than 2000ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(2000);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"motDePasse\": \"1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
     {
       "name": "raceEvents",
       "event": [
@@ -61,7 +101,12 @@
       ],
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{dateTest}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
@@ -110,7 +155,12 @@
       ],
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n  \"nom\": \"{{nomTestTermine}}\",\r\n  \"saison\": 2026,\r\n  \"date\":  \"{{datePassee}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
@@ -150,7 +200,12 @@
       ],
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{dateTest}}\",\r\n  \"statut\": \"PLANIFIE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
@@ -190,7 +245,12 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n  \"nom\": \"{{nomTest}}\",\r\n  \"saison\": 2026,\r\n  \"date\": \"{{datePassee}}\",\r\n  \"statut\": \"TERMINE\",\r\n  \"circuitId\": \"{{circuitId}}\"\r\n}",
@@ -231,7 +291,12 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "url": {
           "raw": "http://localhost:3000/api/raceEvents/{{eventId}}",
           "protocol": "http",
@@ -263,7 +328,12 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "url": {
           "raw": "http://localhost:3000/api/raceEvents/{{eventId}}",
           "protocol": "http",
@@ -295,7 +365,12 @@
       ],
       "request": {
         "method": "PUT",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{monTokenBearer}}"
+          }
+        ],
         "url": {
           "raw": "http://localhost:3000/api/raceEvents/{{eventIdTermine}}",
           "protocol": "http",
@@ -313,6 +388,16 @@
       "response": []
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
       "key": "nomTest",
@@ -340,6 +425,10 @@
     },
     {
       "key": "nomTestTermine",
+      "value": ""
+    },
+    {
+      "key": "monTokenBearer",
       "value": ""
     }
   ]
