@@ -1,16 +1,15 @@
-import { Route, Routes } from "react-router"
-import Home from "./HomePage"
+import { Routes, Route } from "react-router"
+import HomePage from "./HomePage"
+import Layout from "./Layout"
 
-function router () {
-
+function Router() {
     return (
-        <div>
-            <Routes>
-                <Route path="/" element={<Home />} />
-            </Routes>
-        </div>
-    ) 
-
+        <Routes>
+            <Route element={<Layout />}>
+                <Route path="/" element={<HomePage />} />
+            </Route>
+        </Routes>
+    )
 }
 
-export default router
+export default Router
