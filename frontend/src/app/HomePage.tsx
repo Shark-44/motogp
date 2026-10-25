@@ -5,7 +5,7 @@ const entries = [
   { path: '/calendrier', label: 'Calendrier', offset: 'ml-0 md:ml-[-100px]' },
   { path: '/circuits', label: 'Circuits', offset: 'ml-0 md:ml-[-40px]' },
   { path: '/riders', label: 'Pilotes', offset: 'ml-0 md:ml-[20px]' },
-  { path: '/equipes', label: 'Équipes', offset: 'ml-0 md:ml-[80px]' },
+  { path: '/teams', label: 'Équipes', offset: 'ml-0 md:ml-[80px]' },
   { path: '/classements', label: 'Classements', offset: 'ml-0 md:ml-[140px]' },
 ]
 

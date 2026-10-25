@@ -6,6 +6,9 @@ import CircuitsPage from "@/modules/circuits/ui/CircuitsPage"
 import { getCircuits } from "./composition"
 import RidersPage from "@/modules/riders/ui/RidersPage"
 import { getRiders } from "./composition"
+import TeamsPage from "@/modules/teams/ui/TeamsPage"
+import { getTeams } from "./composition"
+
 
 function Router() {
     return (
@@ -19,6 +22,10 @@ function Router() {
                 <Route
                     path="/riders"
                     element={<RidersPage getRiders={getRiders} />}
+                />
+                <Route
+                    path="/teams"
+                    element={<TeamsPage getTeams={getTeams} />}
                 />
             </Route>
         </Routes>
