@@ -4,6 +4,8 @@ import HomePage from "./HomePage"
 import Layout from "./Layout"
 import CircuitsPage from "@/modules/circuits/ui/CircuitsPage"
 import { getCircuits } from "./composition"
+import RidersPage from "@/modules/riders/ui/RidersPage"
+import { getRiders } from "./composition"
 
 function Router() {
     return (
@@ -13,6 +15,10 @@ function Router() {
                 <Route
                     path="/circuits"
                     element={<CircuitsPage getCircuits={getCircuits} />}
+                />
+                <Route
+                    path="/riders"
+                    element={<RidersPage getRiders={getRiders} />}
                 />
             </Route>
         </Routes>
