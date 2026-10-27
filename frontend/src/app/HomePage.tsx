@@ -2,7 +2,7 @@
 import { LinkButton } from '@/components/ui/button'
 
 const entries = [
-  { path: '/calendrier', label: 'Calendrier', offset: 'ml-0 md:ml-[-100px]' },
+  { path: '/raceEvents', label: 'Calendrier', offset: 'ml-0 md:ml-[-100px]' },
   { path: '/circuits', label: 'Circuits', offset: 'ml-0 md:ml-[-40px]' },
   { path: '/riders', label: 'Pilotes', offset: 'ml-0 md:ml-[20px]' },
   { path: '/teams', label: 'Équipes', offset: 'ml-0 md:ml-[80px]' },
