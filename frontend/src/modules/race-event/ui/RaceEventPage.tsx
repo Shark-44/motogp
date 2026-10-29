@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GetRaceEvents } from '../application/Getrace_events'
-import { findNextEventIndex } from './findNextEventIndex'
+//import { findNextEventIndex } from './findNextEventIndex'
 import { useRaceEvents } from './use-race-events'
 
 interface RaceEventPageProps {
@@ -30,7 +30,8 @@ function RaceEventPage({ getRaceEvents }: RaceEventPageProps) {
   const events = state.status === 'success' ? state.raceEvents : []
 
   // -1 si la saison est terminée (aucun événement à venir).
-  const nextIndex = findNextEventIndex(events, new Date())
+  //const nextIndex = findNextEventIndex(events, new Date())
+  const nextIndex = events.findIndex((event) => event.statut === 'PLANIFIE')
 
   // La carte sur laquelle on se centre : le prochain, sinon le dernier de la saison.
   const focusIndex = nextIndex >= 0 ? nextIndex : events.length - 1
