@@ -24,6 +24,7 @@ const pilote = {
     id: 'pilote-1',
     nom: 'Bezzecchi',
     prenom: 'Marco',
+    photo: 'photo',
 };
 
 const classement = {
@@ -84,6 +85,7 @@ describe('ListerRiderStandingsUseCase', () => {
             positionGenerale: 1,
             nom: 'Bezzecchi',
             prenom: 'Marco',
+            photo: 'photo',
             nomEvent: 'Grand Prix de Thaïlande',
             dateEvent: new Date('2026-03-01T15:00:00.000Z'),
             circuitEvent: 'circuit-1',

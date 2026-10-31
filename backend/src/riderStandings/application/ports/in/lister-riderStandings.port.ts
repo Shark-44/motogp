@@ -6,6 +6,7 @@ export interface DetailCircuitRiderStandings {
   positionGenerale: number;
   nom?: string;
   prenom?: string;
+  photo?: string;
   nomEvent?: string;
   dateEvent?: Date;
   circuitEvent?: string;
