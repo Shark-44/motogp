@@ -6,6 +6,7 @@ export interface DetailRiderStandings {
   positionGenerale: number;
   nom: string | undefined;
   prenom: string | undefined;
+  photo: string | undefined;
   nomEvent: string;
   dateEvent: Date;
   circuitEvent: string;

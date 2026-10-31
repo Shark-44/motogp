@@ -33,6 +33,7 @@ export class ListerDetailRiderStandingsUseCase implements ListerDetailRiderStand
             ...ligne,
             nom: pilId.get(ligne.piloteId)?.nom,
             prenom: pilId.get(ligne.piloteId)?.prenom,
+            photo: pilId.get(ligne.piloteId)?.photo,
             nomEvent: evenement.nom,
             dateEvent: evenement.date,
             circuitEvent: evenement.circuitId,

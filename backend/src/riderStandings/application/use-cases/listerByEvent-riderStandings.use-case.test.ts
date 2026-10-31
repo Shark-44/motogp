@@ -20,10 +20,10 @@ const evenement = {
 };
 
 const pilotes = [
-  { id: 'p1', nom: 'Bagnaia', prenom: 'Francesco' },
-  { id: 'p2', nom: 'Martin', prenom: 'Jorge' },
-  { id: 'p3', nom: 'Marquez', prenom: 'Marc' },
-  { id: 'p4', nom: 'Quartararo', prenom: 'Fabio' }, // présent en base mais pas au classement
+  { id: 'p1', nom: 'Bagnaia', prenom: 'Francesco', photo: 'bagnaia.jpg' },
+  { id: 'p2', nom: 'Martin', prenom: 'Jorge', photo: 'martin.jpg' },
+  { id: 'p3', nom: 'Marquez', prenom: 'Marc', photo: 'marc.jpg' },
+  { id: 'p4', nom: 'Quartararo', prenom: 'Fabio', photo: 'fabio.jpg' }, // présent en base mais pas au classement
 ];
 
 const classement = [
@@ -70,9 +70,9 @@ describe('ListerDetailRiderStandingsUseCase', () => {
     const resultat = await mocks.useCase.execute(EVENT_ID);
 
     expect(resultat).toHaveLength(3);
-    expect(resultat[0]).toMatchObject({ piloteId: 'p2', nom: 'Martin', prenom: 'Jorge' });
-    expect(resultat[1]).toMatchObject({ piloteId: 'p1', nom: 'Bagnaia', prenom: 'Francesco' });
-    expect(resultat[2]).toMatchObject({ piloteId: 'p3', nom: 'Marquez', prenom: 'Marc' });
+    expect(resultat[0]).toMatchObject({ piloteId: 'p2', nom: 'Martin', prenom: 'Jorge', photo: 'martin.jpg' });
+    expect(resultat[1]).toMatchObject({ piloteId: 'p1', nom: 'Bagnaia', prenom: 'Francesco', photo: 'bagnaia.jpg' });
+    expect(resultat[2]).toMatchObject({ piloteId: 'p3', nom: 'Marquez', prenom: 'Marc', photo: 'marc.jpg' });
   });
 
   it("ajoute à chaque ligne le nom, la date et le circuit de l'événement", async () => {

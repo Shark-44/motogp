@@ -49,6 +49,7 @@ export class ListerRiderStandingsUseCase implements ListerRiderStandingPort {
                 positionGenerale: ligne.positionGenerale,
                 nom: pilote?.nom,
                 prenom: pilote?.prenom,
+                photo: pilote?.photo,
                 nomEvent: event?.nom,
                 dateEvent: event?.date,
                 // Remplacement de circuitEvent (l'ID) par les détails du circuit
