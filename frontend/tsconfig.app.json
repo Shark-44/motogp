@@ -9,8 +9,7 @@
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
-    /* Path Aliases */
-    "baseUrl": ".",
+    /* Path Aliases (baseUrl retiré) */
     "paths": {
       "@/*": ["./src/*"]
     },
