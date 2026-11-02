@@ -2,11 +2,13 @@
 import { LinkButton } from '@/components/ui/button'
 
 const entries = [
-  { path: '/raceEvents', label: 'Calendrier', offset: 'ml-0 md:ml-[-100px]' },
-  { path: '/circuits', label: 'Circuits', offset: 'ml-0 md:ml-[-40px]' },
-  { path: '/riders', label: 'Pilotes', offset: 'ml-0 md:ml-[20px]' },
-  { path: '/teams', label: 'Équipes', offset: 'ml-0 md:ml-[80px]' },
-  { path: '/classements', label: 'Classements', offset: 'ml-0 md:ml-[140px]' },
+  { path: '/raceEvents', label: 'Calendrier', offset: 'ml-0 md:ml-[-160px]' },
+  { path: '/circuits', label: 'Circuits', offset: 'ml-0 md:ml-[60px]' },
+  { path: '/riders', label: 'Pilotes', offset: 'ml-0 md:ml-[320px]' },
+  { path: '/teams', label: 'Équipes', offset: 'ml-0 md:ml-[-160px]' },
+  { path: '/riderStandings', label: 'Classement par pilote', offset: 'ml-0 md:ml-[60px]' },
+  { path: '/classements', label: 'Classement par équipe', offset: 'ml-0 md:ml-[320px]' },
+
 ]
 
 function HomePage() {
@@ -22,16 +24,21 @@ function HomePage() {
         </p>
       </header>
 
-      <div className="flex flex-col items-start gap-4 max-w-md mx-auto">
+      <div className="flex flex-col items-start gap-6 max-w-md mx-auto">
         {entries.map(({ path, label, offset }, index) => (
-          <LinkButton
-            key={path}
-            href={path} // React Aria utilise 'href' pour les liens
-            size="lg"
-            className={`w-80 py-6 bg-red-600 text-black text-xl hover:bg-red-700 font-semibold shadow-lg justify-center transition-all duration-300 ${offset}`}
+          <div
+            key={`${path}-${index}`}
+            
+            className={`p-2 border-t-4 border-l-4 border-r-4 border-white/80 rounded-t-lg transition-all duration-300 ${offset}`}
           >
-            {index + 1}. {label}
-          </LinkButton>
+            <LinkButton
+              href={path}
+              size="lg"
+              className="w-70 py-4 bg-red-600 text-black text-xl hover:bg-red-700 font-semibold shadow-lg justify-center transition-all duration-300"
+            >
+              {index + 1}. {label}
+            </LinkButton>
+          </div>
         ))}
       </div>
     </main>
