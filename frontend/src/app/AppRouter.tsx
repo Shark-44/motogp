@@ -10,7 +10,8 @@ import TeamsPage from "@/modules/teams/ui/TeamsPage"
 import { getTeams } from "./composition"
 import RaceEventPage from "@/modules/race-event/ui/RaceEventPage"
 import { getRaceEvents } from "./composition"
-
+import RiderStandingsPage from "@/modules/rider-standing/ui/RiderStandingsPage"
+import { getRiderStanding } from "./composition"
 
 function Router() {
     return (
@@ -32,6 +33,10 @@ function Router() {
                 <Route
                     path="/raceEvents"
                     element={<RaceEventPage getRaceEvents={getRaceEvents} />}
+                />
+                <Route
+                    path="/riderStandings"
+                    element={<RiderStandingsPage getRiderStanding={getRiderStanding} />}
                 />
             </Route>
         </Routes>
