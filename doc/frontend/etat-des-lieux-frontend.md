@@ -17,6 +17,8 @@
 | 25/10/2026 | `feature_teams` | Module des équipes en lecture |
 | 27/10/2026 | `feature_raceEvent` (1re solution) | Slider des événements, boutons précédent/suivant, prochain événement centré, passés ternes ; règle du prochain événement dans `application/` |
 | 29/10/2026 | `feature_raceEvent` (statut de la base) | Prise en compte du `statut` de la base ; décision D10 ; doc `feature_raceEvent.md` avec captures |
+| 02/11/2026 | `feature_classement-pilote` | Module en lecture ; graphique de positions (top 10 au dernier GP, 1 GP = 1 colonne, axe Y inversé) ; `buildStandingsChart` en `ui/`. Limite : 2 événements de test. |
+
 
 ### Question posée par chaque branche
 
@@ -58,3 +60,7 @@
 - Graphique en points cumulés (échelle qui s'étire, nombres difficiles à lire) au profit des positions.
 - Infobulle comme porteur d'information principal.
 - Sélection de pilotes au-delà du top 10.
+
+## Evolution
+
+- Ma  `feature_correction-generale` aurait du etre nommée  `chore/` une pratique que j'aurais du mettre en place dans mes branches.
