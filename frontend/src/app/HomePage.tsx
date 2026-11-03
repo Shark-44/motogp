@@ -7,7 +7,7 @@ const entries = [
   { path: '/riders', label: 'Pilotes', offset: 'ml-0 md:ml-[320px]' },
   { path: '/teams', label: 'Équipes', offset: 'ml-0 md:ml-[-160px]' },
   { path: '/riderStandings', label: 'Classement par pilote', offset: 'ml-0 md:ml-[60px]' },
-  { path: '/classements', label: 'Classement par équipe', offset: 'ml-0 md:ml-[320px]' },
+  { path: '/teamStandings', label: 'Classement par équipe', offset: 'ml-0 md:ml-[320px]' },
 
 ]
 

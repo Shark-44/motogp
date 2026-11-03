@@ -22,6 +22,10 @@ import { createHttpRaceEventRepository } from '../modules/race-event/infrastruct
 import { createGetRiderStanding } from '../modules/rider-standing/application/Getrider_standing' 
 import { createHttpRiderStandingRepository } from '../modules/rider-standing/infrastructure/HttpRiderStandingRepository'
 
+// ---TeamStanding ---
+import { createGetTeamStanding } from '../modules/team-standing/application/Getteam_standing' 
+import { createHttpTeamStandingRepository } from '../modules/team-standing/infrastructure/HttpTeamStandingRepository'
+
 
 // 1. Initialisation des dépôts (Infrastructure)
 const circuitRepository = createHttpCircuitRepository()
@@ -29,6 +33,7 @@ const riderRepository = createHttpRiderRepository()
 const teamRepository = createHttpTeamRepository()
 const raceEventRepository = createHttpRaceEventRepository()
 const riderStandingRepository = createHttpRiderStandingRepository()
+const teamStandingRepository = createHttpTeamStandingRepository()
 
 
 // 2. Initialisation et export des cas d'usage (Application)
@@ -37,3 +42,4 @@ export const getRiders = createGetRiders(riderRepository)
 export const getTeams = createGetTeams(teamRepository)
 export const getRaceEvents = createGetRaceEvents(raceEventRepository)
 export const getRiderStanding = createGetRiderStanding(riderStandingRepository)
+export const getTeamStanding = createGetTeamStanding(teamStandingRepository)
