@@ -46,6 +46,7 @@ export class ListerTeamStandingsUseCase implements ListerTeamStandingsPort {
                 pointsCumules: ligne.pointsCumules,
                 positionGenerale: ligne.positionGenerale,
                 nomEquipe: equipeMap.get(ligne.equipeId)?.nom,
+                logoEquipe: equipeMap.get(ligne.equipeId)?.logo,
                 nomEvent: dernierEvent.nom,
                 dateEvent: dernierEvent.date,
             }));

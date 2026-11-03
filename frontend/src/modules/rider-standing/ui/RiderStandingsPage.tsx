@@ -53,7 +53,7 @@ function StandingsChart({ standings }: { standings: RiderStanding[] }) {
         <CardTitle>Évolution par Grand Prix (top 10)</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={config} className="h-[400px] w-full">
+        <ChartContainer config={config} className="h-100 w-full">
           <LineChart data={data} margin={{ left: 12, right: 12, top: 12, bottom: -15 }}>
             <CartesianGrid
               vertical

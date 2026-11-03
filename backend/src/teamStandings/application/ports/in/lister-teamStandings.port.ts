@@ -4,6 +4,7 @@ export interface DetailTeamStandings {
   pointsCumules: number;
   positionGenerale: number;
   nomEquipe?: string;
+  logoEquipe?: string;
   nomEvent: string;
   dateEvent: Date;
 }
