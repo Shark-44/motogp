@@ -164,7 +164,7 @@ const declencherServiceStandings = new DeclencherServiseStandingsUseCase(
 const app = express();
 app.use(express.json());
 
-app.use('/auth', routerAdmin(authController, exigerAdminMw));
+app.use('/api/auth', routerAdmin(authController, exigerAdminMw));
 
 app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
@@ -182,5 +182,6 @@ app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 const port = process.env.PORT ?? 3000;
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Backend démarré sur http://localhost:${port}`);
 });
