@@ -16,7 +16,7 @@ export const useAdminShortcut = () => {
 
   const onLoginSuccess = () => {
     setLoginOpen(false);
-    navigate('/circuits');
+    navigate('/adminPage');
   };
 
   return { loginOpen, setLoginOpen, onLoginSuccess };

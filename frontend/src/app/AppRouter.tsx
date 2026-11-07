@@ -14,6 +14,7 @@ import RiderStandingsPage from "@/modules/rider-standing/ui/RiderStandingsPage"
 import { getRiderStanding } from "./composition"
 import TeamStandingsPage from "@/modules/team-standing/ui/TeamStandingsPage"
 import { getTeamStanding } from "./composition"
+import AdminPage from "@/modules/auth/ui/AdminPage"
 
 function Router() {
     return (
@@ -43,6 +44,10 @@ function Router() {
                 <Route
                     path="/teamStandings"
                     element={<TeamStandingsPage getTeamStanding={getTeamStanding} />}
+                />
+                <Route
+                    path="/adminPage"
+                    element={<AdminPage />}
                 />
             </Route>
         </Routes>

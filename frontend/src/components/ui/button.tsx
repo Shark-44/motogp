@@ -1,7 +1,6 @@
 import type * as React from "react"
 import { type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
-//export { buttonVariants } from "./button-variants";
 
 import {
   Button as ButtonPrimitive,
