@@ -4,9 +4,11 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useAdminShortcut } from './layout/useAdminShortcut';
 import { AdminLoginDialog } from '@/modules/auth/ui/AdminLoginDialog';
+import { useAuthAdmin } from '@/modules/auth/ui/useAuthAdmin'; // AJOUT 1
 
 function Layout() {
   const { loginOpen, setLoginOpen, onLoginSuccess } = useAdminShortcut();
+  const { login } = useAuthAdmin(); // AJOUT 2
 
   return (
     <div className="min-h-svh">
@@ -40,6 +42,7 @@ function Layout() {
         open={loginOpen}
         onOpenChange={setLoginOpen}
         onSuccess={onLoginSuccess}
+        onLogin={login} // AJOUT 3
       />
     </div>
   )

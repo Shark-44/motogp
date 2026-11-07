@@ -9,7 +9,6 @@ export class AuthController {
   login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const motDePasse: unknown = req.body?.motDePasse;
-
       if (typeof motDePasse !== 'string' || motDePasse.length === 0) {
         res.status(400).json({ error: 'motDePasse requis' });
         return;
