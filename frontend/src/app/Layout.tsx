@@ -35,16 +35,16 @@ function Layout() {
             Accueil
           </Link>
           {isAdmin && (
-  <button
-    onClick={handleLogout}
-    className={cn(
-      buttonVariants({ variant: 'default' }),
-      'absolute left-20 top-10 z-10 bg-red-600 text-black text-xl hover:bg-red-700 font-semibold shadow-lg'
-    )}
-  >
-    Déconnexion
-  </button>
-)}
+            <button
+              onClick={handleLogout}
+              className={cn(
+              buttonVariants({ variant: 'default' }),
+              'absolute left-20 top-10 z-10 bg-red-600 text-black text-xl hover:bg-red-700 font-semibold shadow-lg'
+              )}
+            >
+            Déconnexion
+            </button>
+          )}
         </div>
 
         <div className="mx-auto flex max-w-4xl items-center justify-between ">

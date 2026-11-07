@@ -23,6 +23,8 @@
 | 03/11/2026 | `feature_classement-equipe` | Module `team-standing` en lecture ; tableau du classement au dernier événement enregistré, décidé par le cas d'usage du backend (le front affiche, sans calcul) ; titre = nom et date de l'événement ; logos via le proxy `/uploads` ; `dateEvent` promise `Date` par le domaine et convertie dans l'adaptateur ; positions 9 et 10 inversées en base, corrigées à la main (données de test) |
 | 03/11/2026 | Outillage | `baseUrl` retiré des tsconfig (déprécié par TypeScript 6) et `paths` déclaré dans `tsconfig.app.json` ; types vérifiés avec `npx tsc -b` ; `tsconfigRootDir` ajouté dans les configs ESLint du front et du back (un commit mêlant front et back avait été bloqué par husky) |
 
+| 07/11/2026 | `feature_auth` | Détaillée dans feature_auth.md ou j'ai construit par step by step  |
+
 ### Question posée par chaque branche
 
 - **circuits** : comment une donnée traverse les couches sans que la page connaisse `fetch` ?
