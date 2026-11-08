@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+// src/modules/race-event/ui/use-race-events.ts
+import { useCallback, useEffect, useState } from 'react'
 import type { RaceEvent } from '../domain/RaceEvents'
 import type { GetRaceEvents } from '../application/Getrace_events'
 
@@ -8,8 +9,14 @@ export type RaceEventsState =
   | { status: 'error'; message: string }
   | { status: 'success'; raceEvents: RaceEvent[] }
 
-export function useRaceEvents(getRaceEvents: GetRaceEvents): RaceEventsState {
+export function useRaceEvents(getRaceEvents: GetRaceEvents): {
+  state: RaceEventsState
+  refresh: () => void
+} {
   const [state, setState] = useState<RaceEventsState>({ status: 'loading' })
+  // Incrémenter ce compteur relance le chargement, sans repasser par « loading » :
+  // les cartes restent affichées pendant le rechargement.
+  const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
     let isMounted = true
@@ -45,7 +52,9 @@ export function useRaceEvents(getRaceEvents: GetRaceEvents): RaceEventsState {
     return () => {
       isMounted = false
     }
-  }, [getRaceEvents])
+  }, [getRaceEvents, reloadKey])
 
-  return state
+  const refresh = useCallback(() => setReloadKey((key) => key + 1), [])
+
+  return { state, refresh }
 }
