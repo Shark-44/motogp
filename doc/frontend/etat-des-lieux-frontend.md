@@ -18,12 +18,10 @@
 | 27/10/2026 | `feature_raceEvent` (1re solution) | Slider des événements, boutons précédent/suivant, prochain événement centré, passés ternes ; règle du prochain événement dans `application/` |
 | 29/10/2026 | `feature_raceEvent` (statut de la base) | Prise en compte du `statut` de la base ; décision D10 ; doc `feature_raceEvent.md` avec captures |
 | 02/11/2026 | `feature_classement-pilote` | Module en lecture ; graphique de positions (top 10 au dernier GP, 1 GP = 1 colonne, axe Y inversé) ; `buildStandingsChart` en `ui/`. Limite : 2 événements de test. |
-
-
 | 03/11/2026 | `feature_classement-equipe` | Module `team-standing` en lecture ; tableau du classement au dernier événement enregistré, décidé par le cas d'usage du backend (le front affiche, sans calcul) ; titre = nom et date de l'événement ; logos via le proxy `/uploads` ; `dateEvent` promise `Date` par le domaine et convertie dans l'adaptateur ; positions 9 et 10 inversées en base, corrigées à la main (données de test) |
 | 03/11/2026 | Outillage | `baseUrl` retiré des tsconfig (déprécié par TypeScript 6) et `paths` déclaré dans `tsconfig.app.json` ; types vérifiés avec `npx tsc -b` ; `tsconfigRootDir` ajouté dans les configs ESLint du front et du back (un commit mêlant front et back avait été bloqué par husky) |
-
 | 07/11/2026 | `feature_auth` | Détaillée dans feature_auth.md ou j'ai construit par step by step  |
+| 08/11/2026 | `feature_auth-maj-raceEvent` | Détaillée dans feature_maj-race-event.md l'idée avec une connexion admin de pouvoir changer le statut d'un evenement en terminé |
 
 ### Question posée par chaque branche
 
