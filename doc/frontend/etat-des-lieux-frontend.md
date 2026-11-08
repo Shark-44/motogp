@@ -24,6 +24,7 @@
 | 03/11/2026 | Outillage | `baseUrl` retiré des tsconfig (déprécié par TypeScript 6) et `paths` déclaré dans `tsconfig.app.json` ; types vérifiés avec `npx tsc -b` ; `tsconfigRootDir` ajouté dans les configs ESLint du front et du back (un commit mêlant front et back avait été bloqué par husky) |
 
 | 07/11/2026 | `feature_auth` | Détaillée dans feature_auth.md ou j'ai construit par step by step  |
+| 08/11/2026 | `feature_auth-maj-raceEvent` | Détaillée dans feature_maj-race-event.md l'idée avec une connexion admin de pouvoir changer le statut d'un evenement en terminé |
 
 ### Question posée par chaque branche
 
