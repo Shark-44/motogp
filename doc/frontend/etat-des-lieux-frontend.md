@@ -55,7 +55,9 @@
 - Titre masqué par une règle globale sur `h1` (à retirer de `index.css`).
 - À vérifier : le `/` initial des chemins de photos des pilotes et des équipes en base.
 - Un autre sujet la centralisation des erreurs en cas de jetons hors délay. Si des données ont été enregistrées pas entierement un effet de rollback. Un sujet qui pourrait etre traité apres un fonctionnement de l'API un plus dans une autre release.
-
+- Je sais que je n'ai pas fais de test unitaire dans le front. Que je dois aussi retourcher les tests d'integration
+  
+  
 ## Décisions qui pourraient bouger
 
 - Statut ou date pour déterminer le prochain événement (D10) : le choix suppose une base tenue à jour par l'admin.
