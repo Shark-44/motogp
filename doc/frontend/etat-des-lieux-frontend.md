@@ -2,12 +2,12 @@
 
 > Carnet d'évolution personnel. On y **ajoute** des entrées datées ; on ne réécrit pas l'histoire.
 > Une ligne résolue se **barre** (`~~texte~~`) avec sa date de clôture, elle ne se supprime pas.
-> Dernière mise à jour : 29/10/2026.
+> Dernière mise à jour : 09/11/2026.
 > Source des dates : `git log --date=short --pretty=format:"%ad  %s" --reverse -- frontend`
 
 ## Posé (acquis, daté)
 
-| Date | Étape | Ce qui a été posé |
+| Date | Branche github | Ce qui a été posé |
 | --- | --- | --- |
 | 20/10/2026 | Préparation du front, base du front | Workspace npm `frontend`, Vite + React + TypeScript, scripts de la racine (`dev`, `lint`, `fix`), proxy de développement vers l'API |
 | 21/10/2026 | Homepage | Structure `app/` + `modules/<entité>/{domain,application,infrastructure,ui}` ; page d'accueil en grille de boutons ; `Layout` en bannière avec bouton Accueil |
@@ -31,12 +31,16 @@
   → règle d'usage dans `application/`, `ANNULE` lu depuis la base ; choix entre la date et le statut tracé dans D10.
 - **pilotes, équipes** : la structure se reproduit-elle en suivant la recette sans rouvrir le code de `circuits` ?
   → *à compléter*, avec ce qui manquait dans la recette.
-
-## En cours
-
 - **Classements** : deux pages séparées, pilotes et équipes, qui consomment des projections calculées par le backend.
   Intention du visiteur : voir comment les pilotes progressent ou reculent au fil de la saison.
   Première tranche prévue : tableau d'un round, puis vue générale.
+
+## En cours
+
+- La mise a jour des resultats apres un event. Je me suis appercu que la page d'acceuil admine ne correspondait pas a mes attentes. Elle est une copie du home car je ne savais pas exactement comment orchestrer les chose.
+  Apres réflexion il y a deux directions, apres une maj d'event je pourrais poursuivre dans une page pour attribuer la position des pilotes. Mais une deuxieme direction est de voir si dans la page home d'admin tout a été bien rentré un filtre entre event terminé - session result ou je vois que je n'ai pas de DTO appropriée dans le backend. Alors je vais diviser cette branche de mis a jour des resultats en plusieurs étapes: l'enregistrement et dans la page home admin un recape.
+
+- Un autre sujet la centralisation des erreurs en cas de jetons hors délay. Si des données ont été enregistrées pas entierement un effet de rollback. Un sujet qui pourrait etre traité apres un fonctionnement de l'API un plus dans une autre release.
 
 ## À aborder (ouvert, sans échéance)
 
@@ -50,7 +54,10 @@
 - Cohérence de nommage : `Getrace_events` / `use-race-events` / `RaceEvents.ts` à aligner sur `GetRaceEvents` / `useRaceEvents` / `RaceEvent.ts`.
 - Titre masqué par une règle globale sur `h1` (à retirer de `index.css`).
 - À vérifier : le `/` initial des chemins de photos des pilotes et des équipes en base.
-
+- Un autre sujet la centralisation des erreurs en cas de jetons hors délay. Si des données ont été enregistrées pas entierement un effet de rollback. Un sujet qui pourrait etre traité apres un fonctionnement de l'API un plus dans une autre release.
+- Je sais que je n'ai pas fais de test unitaire dans le front. Que je dois aussi retourcher les tests d'integration
+  
+  
 ## Décisions qui pourraient bouger
 
 - Statut ou date pour déterminer le prochain événement (D10) : le choix suppose une base tenue à jour par l'admin.
@@ -67,3 +74,5 @@
 ## Evolution
 
 - Ma  `feature_correction-generale` aurait du etre nommée  `chore/` une pratique que j'aurais du mettre en place dans mes branches.
+- J'ai noté que je pouvais encore ameliorer le typage, inclure des limitations
+- Oui je suis parti d'un modele de connexion simplifié mais si je devais le rendre plus strict. J'ai donc une conscience qu'il faudrait que j'ameliore encore le code. L'objectif est une release livrable... Car le perimetre est parfois floue.
