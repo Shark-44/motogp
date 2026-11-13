@@ -51,8 +51,8 @@ export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
           res.typeSession,
           res.statut,
           res.position,
-          rider.id,      // piloteId
-          contract.id    // contratId résolu !
+          rider.id,      
+          contract.id   
         );
       })
     );

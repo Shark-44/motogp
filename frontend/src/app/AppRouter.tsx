@@ -15,6 +15,8 @@ import { getRiderStanding } from "./composition"
 import TeamStandingsPage from "@/modules/team-standing/ui/TeamStandingsPage"
 import { getTeamStanding } from "./composition"
 import AdminPage from "@/modules/auth/ui/AdminPage"
+import RaceSessionResultsPage from '@/modules/session-results/ui/RaceSessionResultsPage'
+import { saveSessionResults } from "./composition" 
 
 function Router() {
     return (
@@ -49,7 +51,16 @@ function Router() {
                     path="/adminPage"
                     element={<AdminPage />}
                 />
-                
+                <Route 
+                    path="/events/:eventId/results" 
+                    element={
+                      <RaceSessionResultsPage 
+                        getRiders={getRiders}          // <-- Réutilisé depuis composition
+                        getRaceEvents={getRaceEvents}  // <-- Réutilisé depuis composition
+                        saveSessionResults={saveSessionResults} 
+                      />
+                    } 
+                />
             </Route>
         </Routes>
     )

@@ -19,14 +19,17 @@ import { createGetRaceEvents } from '../modules/race-event/application/Getrace_e
 import { createHttpRaceEventRepository } from '../modules/race-event/infrastructure/HttpRaceEventRepository'
 import { createMarkRaceEventDone } from '../modules/race-event/application/MarkRaceEventDone'
 
-// ---RiderStanding ---
+// --- RiderStanding ---
 import { createGetRiderStanding } from '../modules/rider-standing/application/Getrider_standing' 
 import { createHttpRiderStandingRepository } from '../modules/rider-standing/infrastructure/HttpRiderStandingRepository'
 
-// ---TeamStanding ---
+// --- TeamStanding ---
 import { createGetTeamStanding } from '../modules/team-standing/application/Getteam_standing' 
 import { createHttpTeamStandingRepository } from '../modules/team-standing/infrastructure/HttpTeamStandingRepository'
 
+// --- SessionResults ---
+import { createHttpSessionResultsRepository } from '@/modules/session-results/infrastructure/HttpSessionResultsRepository'
+import { createSaveSessionResults } from '@/modules/session-results/application/SaveSessionResults'
 
 // 1. Initialisation des dépôts (Infrastructure)
 const circuitRepository = createHttpCircuitRepository()
@@ -35,6 +38,7 @@ const teamRepository = createHttpTeamRepository()
 const raceEventRepository = createHttpRaceEventRepository()
 const riderStandingRepository = createHttpRiderStandingRepository()
 const teamStandingRepository = createHttpTeamStandingRepository()
+const sessionResultsRepository = createHttpSessionResultsRepository()
 
 // 2. Initialisation et export des cas d'usage (Application)
 export const getCircuits = createGetCircuits(circuitRepository)
@@ -44,3 +48,4 @@ export const getRaceEvents = createGetRaceEvents(raceEventRepository)
 export const markRaceEventDone = createMarkRaceEventDone(raceEventRepository)
 export const getRiderStanding = createGetRiderStanding(riderStandingRepository)
 export const getTeamStanding = createGetTeamStanding(teamStandingRepository)
+export const saveSessionResults = createSaveSessionResults(sessionResultsRepository)
