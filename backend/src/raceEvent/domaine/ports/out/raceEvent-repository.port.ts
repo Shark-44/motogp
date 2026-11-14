@@ -8,4 +8,5 @@ export interface RaceEventRepositoryPort {
   updateEvent(raceEvent: RaceEvent): Promise<RaceEvent>;
   chercherDernierEventTermine():Promise<RaceEvent | null>;
   chercherProchainEventPlanifie(): Promise<RaceEvent | null>;
+  findIncompletedEvents(): Promise<RaceEvent[]>;
 }

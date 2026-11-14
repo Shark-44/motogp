@@ -13,6 +13,31 @@ export class PrismaRaceEventRepository implements RaceEventRepositoryPort {
     );
   }
 
+  async findIncompletedEvents(): Promise<RaceEvent[]> {
+    const records = await this.prisma.raceEvent.findMany({
+      where: {
+        statut: 'TERMINE',
+        OR: [
+          {
+            sessionResults: {
+              none: { typeSession: 'SPRINT' },
+            },
+          },
+          {
+            sessionResults: {
+              none: { typeSession: 'RACE' },
+            },
+          },
+        ],
+      },
+    });
+  
+    return records.map(
+      (row) =>
+        new RaceEvent(row.id, row.nom, row.saison, row.date, row.statut, row.circuitId),
+    );
+  }
+
   async findByDate(date: Date): Promise<RaceEvent | null> {
     const row = await this.prisma.raceEvent.findFirst({ where: { date } });
     if (!row) return null;

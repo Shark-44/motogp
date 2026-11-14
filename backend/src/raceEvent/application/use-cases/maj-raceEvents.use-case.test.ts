@@ -17,6 +17,7 @@ describe('MajRaceEventsUseCase', () => {
       updateEvent: vi.fn().mockImplementation(async (raceEvent: RaceEvent) => raceEvent),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new MajRaceEventsUseCase(fakeRepository);
@@ -35,6 +36,7 @@ describe('MajRaceEventsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new MajRaceEventsUseCase(fakeRepository);
@@ -55,6 +57,7 @@ describe('MajRaceEventsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new MajRaceEventsUseCase(fakeRepository);
@@ -75,6 +78,7 @@ describe('MajRaceEventsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new MajRaceEventsUseCase(fakeRepository);
