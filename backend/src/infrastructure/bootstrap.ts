@@ -55,6 +55,7 @@ import { MajFinContractUseCase } from '../contract/application/use-cases/maj.fin
 
 import { PrismaRaceEventRepository } from '../raceEvent/adapters/out/persistence/prisma-raceEvent.repository.js';
 import { ListerRaceEventsUseCase } from '../raceEvent/application/use-cases/lister-raceEvents.use-case.js';
+import { ListerRaceEventsIncompletsUseCase} from '../raceEvent/application/use-cases/lister-raceEvents-incomplets.use-case.js'
 import { raceEventRouter } from '../raceEvent/adapters/in/http/raceEvent.controller.js';
 import { CreerRaceEventsUseCase } from '../raceEvent/application/use-cases/creer-raceEvents.use-case.js';
 import { MajRaceEventsUseCase } from '../raceEvent/application/use-cases/maj-raceEvents.use-case.js';
@@ -111,6 +112,7 @@ const listerRiders = new ListerRidersUseCase(riderRepository);
 const listerTeams = new ListerTeamsUseCase(teamRepository);
 
 const listerRaceEvents = new ListerRaceEventsUseCase(raceEventRepository);
+const listerRaceEventsIncomplets = new ListerRaceEventsIncompletsUseCase(raceEventRepository);
 const creerRaceEvents = new CreerRaceEventsUseCase(raceEventRepository);
 const majRaceEvents = new MajRaceEventsUseCase(raceEventRepository);
 
@@ -170,8 +172,8 @@ app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract, exigerAdminMw));
-app.use('/api', raceEventRouter(listerRaceEvents, creerRaceEvents, majRaceEvents, exigerAdminMw));
-app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults, exigerAdminMw));
+app.use('/api', raceEventRouter(listerRaceEvents, listerRaceEventsIncomplets, creerRaceEvents, majRaceEvents, exigerAdminMw )
+);app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults, exigerAdminMw));
 app.use('/api', riderStandingsRouter(calculerRiderStandings, exigerAdminMw));
 app.use('/api', teamStandingsRouter(ListerTeamStandings));
 
