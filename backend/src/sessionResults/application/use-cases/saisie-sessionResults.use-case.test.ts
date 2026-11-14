@@ -44,6 +44,7 @@ function creerRepositories(overrides?: {
     updateEvent: vi.fn(),
     chercherDernierEventTermine: vi.fn(),
     chercherProchainEventPlanifie: vi.fn(),
+    findIncompletedEvents: vi.fn().mockResolvedValue([]),
   };
 
   const riderRepository: RiderRepositoryPort = {
