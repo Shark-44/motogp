@@ -7,7 +7,7 @@ export const SESSION_LABEL: Record<SessionType, string> = {
 }
 
 export const STATUS_LABEL: Record<ResultStatus, string> = {
-  FINISHED: 'Classé / arrivé',
-  DNF: 'Abandon (DNF / chute)',
-  DSQ: 'Disqualifié (DSQ)',
+  TERMINE: 'Classé / arrivé',
+  ABANDON: 'Abandon (chute, panne…)',
+  NON_PARTANT: 'Non-partant (forfait)',
 }

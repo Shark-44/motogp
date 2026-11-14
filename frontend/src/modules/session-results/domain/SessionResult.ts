@@ -2,7 +2,7 @@
 // Valeurs reprises de la maquette de page : à aligner sur l'enum de l'entité
 // sessionResults du backend (non vue). Un seul fichier à changer si elles diffèrent.
 export type SessionType = 'SPRINT' | 'RACE'
-export type ResultStatus = 'FINISHED' | 'DNF' | 'DSQ'
+export type ResultStatus = 'TERMINE' | 'ABANDON' | 'NON_PARTANT'
 
 // Une ligne envoyée au back : exactement les champs lus par le cas d'usage de saisie.
 export interface SessionResultEntry {

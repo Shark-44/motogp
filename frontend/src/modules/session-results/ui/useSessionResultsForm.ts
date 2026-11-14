@@ -26,7 +26,7 @@ const emptyRows = (): ResultRow[] =>
   Array.from({ length: MAX_ROWS }, (_, index) => ({
     position: index + 1,
     fimNumber: null,
-    statut: 'FINISHED',
+    statut: 'TERMINE',
   }))
 
 interface Options {
@@ -102,7 +102,7 @@ export function useSessionResultsForm({
           fimNumber: row.fimNumber,
           typeSession: sessionType,
           statut: row.statut,
-          position: row.position,
+          position: row.statut === 'TERMINE' ? row.position : null,
         })
       }
     }
