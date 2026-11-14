@@ -19,6 +19,7 @@ describe('CreerRaceEventsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);
@@ -45,6 +46,7 @@ describe('CreerRaceEventsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new CreerRaceEventsUseCase(fakeRepository);

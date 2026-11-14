@@ -13,6 +13,7 @@ describe('ListerCircuitsUseCase', () => {
       updateEvent: vi.fn(),
       chercherDernierEventTermine: vi.fn(),
       chercherProchainEventPlanifie: vi.fn(),
+      findIncompletedEvents: vi.fn().mockResolvedValue([]),
     };
 
     const useCase = new ListerRaceEventsUseCase(fakeRepository);
