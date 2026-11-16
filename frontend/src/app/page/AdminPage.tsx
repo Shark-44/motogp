@@ -1,9 +1,8 @@
 import { LinkButton } from '@/components/ui/button'
-import { IncompleteRaceEventsCarousel } from '../../modules/race-event/ui/raceEventsIncomplet' 
-import type { GetRaceEventsIncomplet } from '../../modules/race-event/application/GetRaceEventsIncomplet'
+import { IncompleteRaceEventsCarousel } from '@/modules/race-event/ui/raceEventsIncomplet' 
+import type { GetRaceEventsIncomplet } from '@/modules/race-event/application/GetRaceEventsIncomplet'
 
 interface AdminPageProps {
-  // 1. La prop attendue par AdminPage
   getRaceEventsIncomplet: GetRaceEventsIncomplet;
 }
 
@@ -11,7 +10,6 @@ const entries = [
   { path: '/raceEvents', label: 'Calendrier', offset: 'ml-0 md:ml-[-160px]' },
 ]
 
-// 2. On récupère bien "getRaceEventsIncomplet" ici dans les arguments
 function AdminPage({ getRaceEventsIncomplet }: AdminPageProps) {
   return (
     <main className="mx-auto max-w-4xl p-6 text-center">
@@ -38,7 +36,6 @@ function AdminPage({ getRaceEventsIncomplet }: AdminPageProps) {
         ))}
       </div>
       
-      {/* 3. On passe cette même variable (sans guillemets) au carrousel */}
       <IncompleteRaceEventsCarousel getRaceEvents={getRaceEventsIncomplet} />
     </main>
   )

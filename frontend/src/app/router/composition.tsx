@@ -3,29 +3,31 @@
 // c'est le routeur qui passe les cas d'usage aux pages en props.
 
 // --- Circuits ---
-import { createGetCircuits } from '../../modules/circuits/application/Getcircuits'
-import { createHttpCircuitRepository } from '../../modules/circuits/infrastructure/HttpCircuitRepository'
+import { createGetCircuits } from '@/modules/circuits/application/Getcircuits'
+import { createHttpCircuitRepository } from '@/modules/circuits/infrastructure/HttpCircuitRepository'
 
 // --- Riders ---
-import { createGetRiders } from '../../modules/riders/application/Getriders' 
-import { createHttpRiderRepository } from '../../modules/riders/infrastructure/HttpRiderRepository'
+import { createGetRiders } from '@/modules/riders/application/Getriders' 
+import { createHttpRiderRepository } from '@/modules/riders/infrastructure/HttpRiderRepository'
 
 // --- Teams ---
-import { createGetTeams } from '../../modules/teams/application/Getteams' 
-import { createHttpTeamRepository } from '../../modules/teams/infrastructure/HttpTeamRepository'
+import { createGetTeams } from '@/modules/teams/application/Getteams' 
+import { createHttpTeamRepository } from '@/modules/teams/infrastructure/HttpTeamRepository'
 
 // --- RaceEvents ---
-import { createGetRaceEvents } from '../../modules/race-event/application/Getrace_events' 
-import { createHttpRaceEventRepository } from '../../modules/race-event/infrastructure/HttpRaceEventRepository'
-import { createMarkRaceEventDone } from '../../modules/race-event/application/MarkRaceEventDone'
+import { createGetRaceEvents } from '@/modules/race-event/application/Getrace_events' 
+import { createHttpRaceEventRepository } from '@/modules/race-event/infrastructure/HttpRaceEventRepository'
+import { createMarkRaceEventDone } from '@/modules/race-event/application/MarkRaceEventDone'
+import { createGetRaceEventsIncomplet } from '@/modules/race-event/application/GetRaceEventsIncomplet' 
+
 
 // --- RiderStanding ---
-import { createGetRiderStanding } from '../../modules/rider-standing/application/Getrider_standing' 
-import { createHttpRiderStandingRepository } from '../../modules/rider-standing/infrastructure/HttpRiderStandingRepository'
+import { createGetRiderStanding } from '@/modules/rider-standing/application/Getrider_standing' 
+import { createHttpRiderStandingRepository } from '@/modules/rider-standing/infrastructure/HttpRiderStandingRepository'
 
 // --- TeamStanding ---
-import { createGetTeamStanding } from '../../modules/team-standing/application/Getteam_standing' 
-import { createHttpTeamStandingRepository } from '../../modules/team-standing/infrastructure/HttpTeamStandingRepository'
+import { createGetTeamStanding } from '@/modules/team-standing/application/Getteam_standing' 
+import { createHttpTeamStandingRepository } from '@/modules/team-standing/infrastructure/HttpTeamStandingRepository'
 
 // --- SessionResults ---
 import { createHttpSessionResultsRepository } from '@/modules/session-results/infrastructure/HttpSessionResultsRepository'
@@ -49,9 +51,4 @@ export const markRaceEventDone = createMarkRaceEventDone(raceEventRepository)
 export const getRiderStanding = createGetRiderStanding(riderStandingRepository)
 export const getTeamStanding = createGetTeamStanding(teamStandingRepository)
 export const saveSessionResults = createSaveSessionResults(sessionResultsRepository)
-
-import { createGetRaceEventsIncomplet } from '@/modules/race-event/application/GetRaceEventsIncomplet' // (Vérifie le nom exact de ton fichier de cas d'usage)
-
-
-// 2. On crée et on exporte la fonction attendue par ton routeur et ta page admin
 export const getRaceEventsIncomplet = createGetRaceEventsIncomplet(raceEventRepository)

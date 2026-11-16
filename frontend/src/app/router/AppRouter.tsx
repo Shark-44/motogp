@@ -58,8 +58,8 @@ function Router() {
                     path="/events/:eventId/results" 
                     element={
                       <RaceSessionResultsPage 
-                        getRiders={getRiders}          // <-- Réutilisé depuis composition
-                        getRaceEvents={getRaceEvents}  // <-- Réutilisé depuis composition
+                        getRiders={getRiders}          
+                        getRaceEvents={getRaceEvents}  
                         saveSessionResults={saveSessionResults} 
                       />
                     } 
