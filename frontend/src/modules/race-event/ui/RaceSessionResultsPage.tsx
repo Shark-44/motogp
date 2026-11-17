@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-
-export interface Pilot {
-  fimNumber: number;
-  name: string;
-  team: string;
-  isWildcard?: boolean;
-}
+import type { Rider } from '@/modules/riders/domain/Riders';
 
 export type SessionType = 'SPRINT' | 'RACE';
 export type PilotStatus = 'FINISHED' | 'DNF' | 'DSQ';
@@ -17,46 +11,25 @@ export interface ResultEntry {
   notes?: string;
 }
 
-// Grille de référence des 22 pilotes officiels + 2 Wildcards
-const INITIAL_PILOTS: Pilot[] = [
-  { fimNumber: 1, name: "Francesco Bagnaia", team: "Ducati Lenovo Team" },
-  { fimNumber: 89, name: "Jorge Martín", team: "Prima Pramac Racing" },
-  { fimNumber: 93, name: "Marc Márquez", team: "Gresini Racing" },
-  { fimNumber: 72, name: "Marco Bezzecchi", team: "Pertamina Enduro VR46" },
-  { fimNumber: 12, name: "Maverick Viñales", team: "Aprilia Racing" },
-  { fimNumber: 41, name: "Aleix Espargaró", team: "Aprilia Racing" },
-  { fimNumber: 33, name: "Brad Binder", team: "Red Bull KTM Factory" },
-  { fimNumber: 31, name: "Pedro Acosta", team: "Red Bull GASGAS Tech3" },
-  { fimNumber: 20, name: "Fabio Quartararo", team: "Monster Energy Yamaha" },
-  { fimNumber: 42, name: "Álex Rins", team: "Monster Energy Yamaha" },
-  { fimNumber: 36, name: "Joan Mir", team: "Repsol Honda Team" },
-  { fimNumber: 10, name: "Luca Marini", team: "Repsol Honda Team" },
-  { fimNumber: 5, name: "Johann Zarco", team: "LCR Honda Castrol" },
-  { fimNumber: 30, name: "Takaaki Nakagami", team: "LCR Honda Idemitsu" },
-  { fimNumber: 49, name: "Fabio Di Giannantonio", team: "Pertamina Enduro VR46" },
-  { fimNumber: 73, name: "Álex Márquez", team: "Gresini Racing" },
-  { fimNumber: 21, name: "Franco Morbidelli", team: "Prima Pramac Racing" },
-  { fimNumber: 23, name: "Enea Bastianini", team: "Ducati Lenovo Team" },
-  { fimNumber: 25, name: "Raúl Fernández", team: "Trackhouse Racing" },
-  { fimNumber: 88, name: "Miguel Oliveira", team: "Trackhouse Racing" },
-  { fimNumber: 43, name: "Jack Miller", team: "Red Bull KTM Factory" },
-  { fimNumber: 37, name: "Augusto Fernández", team: "Red Bull GASGAS Tech3" },
-  // Wildcards optionnels
-  { fimNumber: 26, name: "Dani Pedrosa", team: "Red Bull KTM (Wildcard)", isWildcard: true },
-  { fimNumber: 32, name: "Lorenzo Savadori", team: "Aprilia Test Team (Wildcard)", isWildcard: true }
-];
+// Extension locale si ton type Rider du domaine n'expose pas encore name/team
+interface DisplayRider extends Rider {
+  name?: string;
+  team?: string;
+}
 
-export const RaceSessionResultsPage: React.FC = () => {
+interface RidersPageProps {
+  getRiders: Rider[];
+}
+
+export const RaceSessionResultsPage = ({ getRiders }: RidersPageProps) => {
   const [sessionType, setSessionType] = useState<SessionType>('RACE');
-  const [includeWildcards, setIncludeWildcards] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  
+  const INITIAL_PILOTS: DisplayRider[] = getRiders;
+  const maxPilots = INITIAL_PILOTS.length > 0 ? INITIAL_PILOTS.length : 22;
 
-  // Nombre total de places selon les wildcards (22 ou 24)
-  const maxPilots = includeWildcards ? 24 : 22;
-
-  // Initialisation des lignes du tableau de résultat
   const [results, setResults] = useState<ResultEntry[]>(() =>
-    Array.from({ length: 24 }, (_, i) => ({
+    Array.from({ length: maxPilots }, (_, i) => ({
       position: i + 1,
       fimNumber: null,
       status: 'FINISHED',
@@ -64,9 +37,7 @@ export const RaceSessionResultsPage: React.FC = () => {
     }))
   );
 
-  const availablePilots = INITIAL_PILOTS.filter(
-    (p) => includeWildcards || !p.isWildcard
-  );
+  const availablePilots = INITIAL_PILOTS;
 
   const handleSelectPilot = (position: number, fimNumber: number | null) => {
     setResults((prev) =>
@@ -74,7 +45,6 @@ export const RaceSessionResultsPage: React.FC = () => {
         if (item.position === position) {
           return { ...item, fimNumber };
         }
-        // Si le pilote était déjà attribué ailleurs, on le libère de l'ancienne position
         if (fimNumber !== null && item.fimNumber === fimNumber) {
           return { ...item, fimNumber: null };
         }
@@ -112,16 +82,17 @@ export const RaceSessionResultsPage: React.FC = () => {
 
     console.log("Payload session envoyé :", payload);
     
-    // Simulation d'un appel API/Use-case applicatif
     setTimeout(() => {
       setIsSubmitting(false);
       alert(`Session ${sessionType} enregistrée avec succès !`);
     }, 600);
   };
 
-  // Récupération des N° FIM déjà attribués pour bloquer les doublons dans les menus déroulants
   const assignedFimNumbers = new Set(
-    results.slice(0, maxPilots).map((r) => r.fimNumber).filter(Boolean)
+    results
+      .slice(0, maxPilots)
+      .map((r) => (r.fimNumber !== null ? Number(r.fimNumber) : null))
+      .filter((num): num is number => num !== null)
   );
 
   return (
@@ -132,11 +103,9 @@ export const RaceSessionResultsPage: React.FC = () => {
       </header>
 
       <form onSubmit={handleSubmit}>
-        {/* Barre d'options de la Session */}
         <div style={styles.configCard}>
           <div style={styles.fieldGroup}>
             <label style={styles.label}>Type de Session :</label>
-
             <select
               value={sessionType}
               onChange={(e) => setSessionType(e.target.value as SessionType)}
@@ -146,21 +115,8 @@ export const RaceSessionResultsPage: React.FC = () => {
               <option value="RACE">Course Principale (Race)</option>
             </select>
           </div>
-
-          <div style={styles.checkboxGroup}>
-            <label style={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={includeWildcards}
-                onChange={(e) => setIncludeWildcards(e.target.checked)}
-                style={styles.checkbox}
-              />
-              Activer les Wildcards (+2 Pilotes / Total: 24)
-            </label>
-          </div>
         </div>
 
-        {/* Tableau des Résultats */}
         <div style={styles.tableWrapper}>
           <table style={styles.table}>
             <thead>
@@ -175,7 +131,7 @@ export const RaceSessionResultsPage: React.FC = () => {
             <tbody>
               {results.slice(0, maxPilots).map((row) => {
                 const currentPilot = availablePilots.find(
-                  (p) => p.fimNumber === row.fimNumber
+                  (p) => Number(p.fimNumber) === Number(row.fimNumber)
                 );
 
                 return (
@@ -200,24 +156,24 @@ export const RaceSessionResultsPage: React.FC = () => {
                       >
                         <option value="">-- Sélectionner Pilote --</option>
                         {availablePilots.map((pilot) => {
+                          const pilotNum = Number(pilot.fimNumber);
                           const isAssigned =
-                            assignedFimNumbers.has(pilot.fimNumber) &&
-                            pilot.fimNumber !== row.fimNumber;
+                            assignedFimNumbers.has(pilotNum) &&
+                            pilotNum !== Number(row.fimNumber);
                           return (
                             <option
                               key={pilot.fimNumber}
                               value={pilot.fimNumber}
                               disabled={isAssigned}
                             >
-                              #{pilot.fimNumber} - {pilot.name}{" "}
-                              {pilot.isWildcard ? "(WC)" : ""}
+                              #{pilot.fimNumber} - {pilot.name ?? ''}
                             </option>
                           );
                         })}
                       </select>
                     </td>
                     <td style={styles.tdTeam}>
-                      {currentPilot ? currentPilot.team : '-'}
+                      {currentPilot ? currentPilot.team ?? '-' : '-'}
                     </td>
                     <td style={styles.td}>
                       <select
@@ -313,21 +269,6 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '6px',
     border: '1px solid #CBD5E0',
     backgroundColor: '#FFF'
-  },
-  checkboxGroup: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  checkboxLabel: {
-    fontSize: '14px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  },
-  checkbox: {
-    width: '16px',
-    height: '16px'
   },
   tableWrapper: {
     overflowX: 'auto',
