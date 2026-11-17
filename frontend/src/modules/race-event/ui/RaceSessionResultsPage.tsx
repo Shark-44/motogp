@@ -5,7 +5,7 @@ import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
 
 export type SessionType = 'SPRINT' | 'RACE';
-export type PilotStatus = 'FINISHED' | 'DNF' | 'DSQ';
+export type PilotStatus = 'TERMINE' | 'ABANDON' | 'NON_PARTANT';
 
 export interface ResultEntry {
   position: number;
@@ -39,7 +39,7 @@ export const RaceSessionResultsPage = ({ getRiders }: RidersPageProps) => {
     Array.from({ length: maxPilots }, (_, i) => ({
       position: i + 1,
       fimNumber: null,
-      status: 'FINISHED',
+      status: 'TERMINE',
       notes: ''
     }))
   );
@@ -152,7 +152,7 @@ export const RaceSessionResultsPage = ({ getRiders }: RidersPageProps) => {
                       key={row.position}
                       className={cn(
                         'border-b border-border/50 transition-colors last:border-0',
-                        row.status === 'DNF' ? 'bg-destructive/10' : 'hover:bg-muted/50'
+                        row.status === 'ABANDON' ? 'bg-destructive/10' : 'hover:bg-muted/50'
                       )}
                     >
                       <td className="w-16 p-3 font-bold">P{row.position}</td>
@@ -201,19 +201,19 @@ export const RaceSessionResultsPage = ({ getRiders }: RidersPageProps) => {
                           }
                           className={cn(
                             fieldClass,
-                            row.status === 'DNF' && 'border-destructive'
+                          row.status === 'ABANDON' && 'border-destructive'
                           )}
                         >
-                          <option value="FINISHED">Classé / Arrivé</option>
-                          <option value="DNF">Abandon (DNF / Chute)</option>
-                          <option value="DSQ">Disqualifié (DSQ)</option>
+                          <option value="TERMINE">Classé / Arrivé</option>
+                          <option value="ABANDON">Abandon (DNF / Chute)</option>
+                          <option value="NON_PARTANT">Non Partant (N_P)</option>
                         </select>
                       </td>
                       <td className="p-2">
                         <input
                           type="text"
                           aria-label={`Remarque en position ${row.position}`}
-                          placeholder={row.status === 'DNF' ? 'Ex: Chute T3, Panne Moteur...' : 'Note optionnelle...'}
+                          placeholder={row.status === 'ABANDON' ? 'Ex: Chute T3, Panne Moteur...' : 'Note optionnelle...'}
                           value={row.notes}
                           onChange={(e) =>
                             handleNotesChange(row.position, e.target.value)
