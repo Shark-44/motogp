@@ -2,7 +2,7 @@
 import { Link, Outlet, useNavigate } from 'react-router'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { cn } from '@/lib/utils'
-import { useAdminShortcut } from './layout/useAdminShortcut';
+import { useAdminShortcut } from './useAdminShortcut';
 import { AdminLoginDialog } from '@/modules/auth/ui/AdminLoginDialog';
 import { useAuthAdmin } from '@/modules/auth/ui/useAuthAdmin'; // AJOUT 1
 
