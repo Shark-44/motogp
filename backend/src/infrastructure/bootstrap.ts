@@ -64,6 +64,7 @@ import { PrismaSessionResultsRepository } from '../sessionResults/adapters/out/p
 import { ListerSessionResultUseCase } from '../sessionResults/application/use-cases/lister-sessionResults.use-case.js';
 import { sessionResultsRouter } from '../sessionResults/adapters/in/http/sessionResults.controller.js';
 import { SaisieSessionResultsUseCase } from '../sessionResults/application/use-cases/saisie-sessionResults.use-case.js';
+import { InMemoryEventBus } from '../sessionResults/adapters/out/events/in-memory-event-bus.js';
 
 import { ReglementPointMotoGP } from '../motogpScoringRules/domaine/services/reglementPointMotoGP.service.js';
 import { DepartageClassement } from '../riderStandings/domaine/services/departage-classement.service.js';
@@ -81,6 +82,7 @@ import { teamStandingsRouter } from '../teamStandings/adapters/in/http/teamStand
 
 // Orchestrateur & Routeur
 import { DeclencherServiseStandingsUseCase } from '../serviceStandings/application/use-cases/declencher-ServiceStandings.use-case.js';
+import { RecalculerApresSaisieHandler } from '../serviceStandings/application/use-cases/recalculer-apres-saisie.handler.js';
 import { standingsRouter } from '../serviceStandings/adapters/in/http/serviceStandings.controller.js';
 import { ListerTeamStandingsUseCase } from '../teamStandings/application/use-cases/lister-teamStandings.use-case.js';
 
@@ -96,6 +98,9 @@ const raceEventRepository = new PrismaRaceEventRepository(prisma);
 const sessionResultsRepository = new PrismaSessionResultsRepository(prisma);
 const riderStandingsRepository = new PrismaRiderStandingsRepository(prisma);
 const teamStandingsRepository = new PrismaTeamStandingsRepository(prisma);
+
+// --- Bus d'événements (la saisie annonce, les classements réagissent) ---
+const eventBus = new InMemoryEventBus();
 
 // --- Services Domaine ---
 const contractValidatorService = new ContractValidatorService(
@@ -134,7 +139,8 @@ const saisieSessionResults = new SaisieSessionResultsUseCase(
   raceEventRepository,
   riderRepository,
   sessionResultsRepository,
-  contractRepository
+  contractRepository,
+  eventBus // <- 5e argument : la saisie annonce « résultats enregistrés »
 );
 
 // Use Cases de calcul métier des classements
@@ -162,6 +168,14 @@ const declencherServiceStandings = new DeclencherServiseStandingsUseCase(
   calculerTeamStandings
 );
 
+// Réaction à la saisie : recalcul quand l'événement a son Sprint ET sa Race.
+// Doit venir APRÈS l'orchestrateur, dont il dépend.
+const recalculerApresSaisie = new RecalculerApresSaisieHandler(
+  sessionResultsRepository,
+  declencherServiceStandings
+);
+eventBus.abonner((evenement) => recalculerApresSaisie.handle(evenement));
+
 // --- Application Express ---
 const app = express();
 app.use(express.json());
@@ -172,12 +186,12 @@ app.use('/api', circuitRouter(listerCircuits));
 app.use('/api', riderRouter(listerRiders));
 app.use('/api', teamRouter(listerTeams));
 app.use('/api', contractRouter(listerContracts, creerContract, majFinContract, exigerAdminMw));
-app.use('/api', raceEventRouter(listerRaceEvents, listerRaceEventsIncomplets, creerRaceEvents, majRaceEvents, exigerAdminMw )
-);app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults, exigerAdminMw));
+app.use('/api', raceEventRouter(listerRaceEvents, listerRaceEventsIncomplets, creerRaceEvents, majRaceEvents, exigerAdminMw));
+app.use('/api', sessionResultsRouter(listerSessionResults, saisieSessionResults, exigerAdminMw));
 app.use('/api', riderStandingsRouter(calculerRiderStandings, exigerAdminMw));
 app.use('/api', teamStandingsRouter(ListerTeamStandings));
 
-// Nouvelle route orchestrée
+// Route de recalcul manuel (relance à la main, sans passer par une saisie)
 app.use('/api', standingsRouter(declencherServiceStandings, exigerAdminMw));
 
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));

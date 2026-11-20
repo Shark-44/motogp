@@ -4,13 +4,15 @@ import type { RiderRepositoryPort } from '../../../riders/domaine/ports/out/ride
 import type { SessionResultsRepositoryPort } from '../../domaine/ports/out/sessionResults-repository.port.js';
 import type { ContractRepositoryPort } from '../../../contract/domaine/ports/out/contract-repository.port.js';
 import { SessionResults } from '../../domaine/entities/sessionResults.entity.js';
+import type { EvenementsPublisherPort } from '../ports/out/evenements-publisher.port.js';
 
 export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
   constructor(
     private readonly raceEventRepository: RaceEventRepositoryPort,
     private readonly riderRepository: RiderRepositoryPort,
     private readonly sessionResultsRepository: SessionResultsRepositoryPort,
-    private readonly contractRepository: ContractRepositoryPort, // <- Dépendance ajoutée
+    private readonly contractRepository: ContractRepositoryPort,
+    private readonly evenements: EvenementsPublisherPort,
   ) {}
 
   async execute(eventId: string, resultats: ResultatSaisi[]): Promise<SessionResults[]> {
@@ -56,7 +58,14 @@ export class SaisieSessionResultsUseCase implements SaisieSessionResultsPort {
         );
       })
     );
+    
+    const sauvegardes = await this.sessionResultsRepository.saveAll(entitesSession);
 
-    return await this.sessionResultsRepository.saveAll(entitesSession);
+    for (const typeSession of new Set(resultats.map((r) => r.typeSession))) {
+      await this.evenements.publier({ eventId, typeSession });
+    }
+
+    return sauvegardes;
+    
   }
 }
